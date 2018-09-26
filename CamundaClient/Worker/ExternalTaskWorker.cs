@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CamundaClient.Worker
 {
-    class ExternalTaskWorker : IDisposable
+    public class ExternalTaskWorker : IDisposable
     {
         private string workerId = Guid.NewGuid().ToString(); // TODO: Make configurable
 
@@ -17,7 +17,7 @@ namespace CamundaClient.Worker
         private int maxTasksToFetchAtOnce = 10;
         private long lockDurationInMilliseconds = 1 * 60 * 1000; // 1 minute
         private ExternalTaskService externalTaskService;
-        private ExternalTaskWorkerInfo taskWorkerInfo;
+        public ExternalTaskWorkerInfo taskWorkerInfo { get; }
 
         public ExternalTaskWorker(ExternalTaskService externalTaskService, ExternalTaskWorkerInfo taskWorkerInfo)
         {
@@ -48,6 +48,24 @@ namespace CamundaClient.Worker
             taskQueryTimer.Change(TimeSpan.FromMilliseconds(50), TimeSpan.FromMilliseconds(Timeout.Infinite));
         }
 
+        public void StartWork()
+        {
+            this.taskQueryTimer = new Timer(_ => DoPolling(), null, pollingIntervalInMilliseconds, Timeout.Infinite);
+        }
+
+        public void StopWork()
+        {
+            this.taskQueryTimer.Dispose();
+        }
+
+        public void Dispose()
+        {
+            if (this.taskQueryTimer !=null)
+            {
+                this.taskQueryTimer.Dispose();
+            }
+        }
+
         private void Execute(ExternalTask externalTask)
         {
             Dictionary<string, object> resultVariables = new Dictionary<string, object>();
@@ -73,24 +91,6 @@ namespace CamundaClient.Worker
                     retriesLeft = externalTask.Retries.Value - 1;
                 }
                 externalTaskService.Failure(workerId, externalTask.Id, ex.Message, retriesLeft, taskWorkerInfo.RetryTimeout);
-            }
-        }
-
-        public void StartWork()
-        {
-            this.taskQueryTimer = new Timer(_ => DoPolling(), null, pollingIntervalInMilliseconds, Timeout.Infinite);
-        }
-
-        public void StopWork()
-        {
-            this.taskQueryTimer.Dispose();
-        }
-
-        public void Dispose()
-        {
-            if (this.taskQueryTimer !=null)
-            {
-                this.taskQueryTimer.Dispose();
             }
         }
     }
