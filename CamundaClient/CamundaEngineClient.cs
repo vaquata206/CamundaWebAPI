@@ -24,6 +24,7 @@ namespace CamundaClient
         public CamundaEngineClient(Uri restUrl, string userName, string password)
         {
             _camundaClientHelper = new CamundaClientHelper(restUrl, userName, password);
+            this.Startup();
         }
 
         public BpmnWorkflowService BpmnWorkflowService => new BpmnWorkflowService(_camundaClientHelper, _userTasks, _workers);

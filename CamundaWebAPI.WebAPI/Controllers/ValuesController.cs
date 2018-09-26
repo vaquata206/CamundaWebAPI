@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CamundaClient;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CamundaWebAPI.WebAPI.Controllers
@@ -10,10 +11,19 @@ namespace CamundaWebAPI.WebAPI.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
+
+        private CamundaEngineClient _camundaClient;
+
+        public ValuesController(CamundaEngineClient camundaClient)
+        {
+            this._camundaClient = camundaClient;
+        }
+
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
+            var a = 0;
             return new string[] { "value1", "value2" };
         }
 
