@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using CamundaWebAPI.ExternalTasks;
+using CamundaWebAPI.Core.Common;
 
 namespace CamundaWebAPI.WebAPI
 {
@@ -20,6 +22,7 @@ namespace CamundaWebAPI.WebAPI
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
             this.Configuration = builder.Build();
+            ConfigSettings.SetupConfig(Configuration);
         }
 
         public IContainer ApplicationContainer { get; private set; }
@@ -47,7 +50,7 @@ namespace CamundaWebAPI.WebAPI
             // in the ServiceCollection. Mix and match as needed.
             builder.Populate(services);
 
-            builder.Register(c => new CamundaEngineClient()).As<CamundaEngineClient>().SingleInstance();
+            builder.Register(c => new CamundaEngineClient(ExternalTasks.Program.GetCurrentDomain())).As<CamundaEngineClient>().SingleInstance();
 
             //builder.RegisterType<CamundaEngineClient>().As<CamundaEngineClient>();
 

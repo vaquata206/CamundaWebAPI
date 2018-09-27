@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CamundaWebAPI.Entity", "Cam
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CamundaClient", "CamundaClient\CamundaClient.csproj", "{D316A8E0-09CB-4D66-B635-94860C3EB799}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CamundaWebAPI.ExternalTasks", "CamundaWebAPI.ExternalTasks\CamundaWebAPI.ExternalTasks.csproj", "{EC35DFAC-D1CE-4082-BBEC-33E8C0A3F3B2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{D316A8E0-09CB-4D66-B635-94860C3EB799}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D316A8E0-09CB-4D66-B635-94860C3EB799}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D316A8E0-09CB-4D66-B635-94860C3EB799}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC35DFAC-D1CE-4082-BBEC-33E8C0A3F3B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC35DFAC-D1CE-4082-BBEC-33E8C0A3F3B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC35DFAC-D1CE-4082-BBEC-33E8C0A3F3B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC35DFAC-D1CE-4082-BBEC-33E8C0A3F3B2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
