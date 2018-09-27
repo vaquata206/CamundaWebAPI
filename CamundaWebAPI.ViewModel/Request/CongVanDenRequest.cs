@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CamundaWebAPI.Entity
+namespace CamundaWebAPI.ViewModel.Request
 {
-    public class CongVanDen : BaseEntity
+    public class CongVanDenRequest : BaseRequest
     {
-        public Guid CongVanDenId { get; set; }
+        public Guid? CongVanDenId { get; set; }
         public string SoCongVan { get; set; }
         public string TrichYeu { get; set; }
-        public int TrangThai { get; set; }
     }
 }
