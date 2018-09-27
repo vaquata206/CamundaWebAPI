@@ -128,12 +128,7 @@
     <bpmn:userTask id="Task_1kxhryx" name="Người tạo xóa công văn">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="xoaCongVan" label="Xoa Cong Van" type="boolean">
-            <camunda:validation>
-              <camunda:constraint name="required" />
-            </camunda:validation>
-          </camunda:formField>
-          <camunda:formField id="trangThai" type="long" defaultValue="Trang Thai">
+          <camunda:formField id="trangThai" type="boolean" defaultValue="Trang Thai">
             <camunda:validation>
               <camunda:constraint name="required" />
             </camunda:validation>
@@ -148,7 +143,7 @@
       <bpmn:terminateEventDefinition />
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="SequenceFlow_0vq8arf" sourceRef="Task_0nrovoj" targetRef="Task_0lef9ok" />
-    <bpmn:serviceTask id="Task_0lef9ok" name="Lưa chỉ đạo" camunda:type="external" camunda:topic="luuChiDao">
+    <bpmn:serviceTask id="Task_0lef9ok" name="Lưu chỉ đạo" camunda:type="external" camunda:topic="luuChiDao">
       <bpmn:incoming>SequenceFlow_0vq8arf</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0bryw0c</bpmn:outgoing>
     </bpmn:serviceTask>
