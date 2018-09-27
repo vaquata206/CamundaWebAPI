@@ -27,21 +27,28 @@ namespace CamundaWebAPI.ExternalTasks
             var responseCode = Constants.ResponseCode.Created;
             try
             {
-                var a = "{SoCongVan: 'aaaa'; TrichYeu: 'bbbb'}";
                 var cvd = ExternalTaskHelper.GetVariable<CongVanDen>(externalTask.Variables, CongVanDen);
-                var now = DateTime.Now;
-
-                using (var uow = new UnitOfWork(ConfigSettings.ConnectionString))
+                if (cvd != null)
                 {
-                    cvd.NgayTao = now;
-                    cvd.TrangThai = Constants.TrangThai.InProgress;
-                    cvd.CongVanDenId = Guid.NewGuid();
+                    var now = DateTime.Now;
 
-                    uow.CongVanDenRepository.Add(cvd);
-                    uow.Commit();
+                    using (var uow = new UnitOfWork(ConfigSettings.ConnectionString))
+                    {
+                        cvd.NgayTao = now;
+                        cvd.TrangThai = Constants.TrangThai.InProgress;
+                        cvd.DaXoa = false;
+                        cvd.CongVanDenId = Guid.NewGuid();
+
+                        uow.CongVanDenRepository.Add(cvd);
+                        uow.Commit();
+                    }
+                }
+                else
+                {
+                    responseCode = Constants.ResponseCode.Failed;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 responseCode = Constants.ResponseCode.Failed;
             }

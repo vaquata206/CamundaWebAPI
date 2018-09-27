@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CamundaClient;
+using CamundaWebAPI.Entity;
+using CamundaWebAPI.ExternalTasks;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace CamundaWebAPI.WebAPI.Controllers
 {
