@@ -5,6 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="BPMNProcess\XuLyPhieuGiaoViecProcess.bpmn" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="BPMNProcess\XuLyPhieuGiaoViecProcess.bpmn" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
