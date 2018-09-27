@@ -50,7 +50,7 @@ namespace CamundaWebAPI.WebAPI
             // in the ServiceCollection. Mix and match as needed.
             builder.Populate(services);
 
-            builder.Register(c => new CamundaEngineClient(ExternalTasks.Program.GetCurrentDomain())).As<CamundaEngineClient>().SingleInstance();
+            builder.Register(c => new CamundaEngineClient(ExternalTaskHelper.GetCurrentDomain())).As<CamundaEngineClient>().SingleInstance();
 
             //builder.RegisterType<CamundaEngineClient>().As<CamundaEngineClient>();
 

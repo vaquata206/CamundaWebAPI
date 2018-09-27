@@ -23,7 +23,6 @@ namespace CamundaWebAPI.WebAPI.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
-            var a = 0;
             return new string[] { "value1", "value2" };
         }
 

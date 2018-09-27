@@ -8,5 +8,7 @@ namespace CamundaWebAPI.Entity
     {
         public Guid CongVanDenId { get; set; }
         public string SoCongVan { get; set; }
+        public string TrichYeu { get; set; }
+        public int TrangThai { get; set; }
     }
 }
