@@ -2,11 +2,6 @@
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_0izkokc" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="2.0.1">
   <bpmn:process id="XuLyCongVanProcess" name="Xu ly cong van process" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1" name="Yêu cầu xử lý công văn">
-      <bpmn:outgoing>SequenceFlow_0cv4ypr</bpmn:outgoing>
-    </bpmn:startEvent>
-    <bpmn:sequenceFlow id="SequenceFlow_0cv4ypr" sourceRef="StartEvent_1" targetRef="Task_13tosu6" />
-    <bpmn:sequenceFlow id="SequenceFlow_0p3z7rm" sourceRef="Task_13tosu6" targetRef="Task_0tvxemo" />
-    <bpmn:userTask id="Task_13tosu6" name="Nhập thông tin công văn">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="congVanDen" label="Cong Van Den" type="string">
@@ -16,26 +11,8 @@
           </camunda:formField>
         </camunda:formData>
       </bpmn:extensionElements>
-      <bpmn:incoming>SequenceFlow_0cv4ypr</bpmn:incoming>
-      <bpmn:incoming>SequenceFlow_02f7ik6</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_0p3z7rm</bpmn:outgoing>
-    </bpmn:userTask>
-    <bpmn:serviceTask id="Task_0tvxemo" name="Kiểm tra công văn" camunda:type="external" camunda:topic="kiemTraCongVan">
-      <bpmn:incoming>SequenceFlow_0p3z7rm</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_09n84x1</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:exclusiveGateway id="ExclusiveGateway_1kabrjf">
-      <bpmn:incoming>SequenceFlow_09n84x1</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_02f7ik6</bpmn:outgoing>
-      <bpmn:outgoing>SequenceFlow_0wtfsdb</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="SequenceFlow_09n84x1" sourceRef="Task_0tvxemo" targetRef="ExclusiveGateway_1kabrjf" />
-    <bpmn:sequenceFlow id="SequenceFlow_02f7ik6" sourceRef="ExclusiveGateway_1kabrjf" targetRef="Task_13tosu6">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!ktCongVan}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="SequenceFlow_0wtfsdb" sourceRef="ExclusiveGateway_1kabrjf" targetRef="Task_0lknw22">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${ktCongVan}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
+      <bpmn:outgoing>SequenceFlow_1lk6eq0</bpmn:outgoing>
+    </bpmn:startEvent>
     <bpmn:sequenceFlow id="SequenceFlow_0l7o65z" sourceRef="Task_0lknw22" targetRef="ExclusiveGateway_02i5z7n" />
     <bpmn:parallelGateway id="ExclusiveGateway_02i5z7n">
       <bpmn:incoming>SequenceFlow_0l7o65z</bpmn:incoming>
@@ -117,7 +94,7 @@
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="SequenceFlow_0ukmhty" sourceRef="Task_0g449k6" targetRef="EndEvent_1eeng6h" />
     <bpmn:serviceTask id="Task_0lknw22" name="Tạo công văn" camunda:type="external" camunda:topic="taoCongVan">
-      <bpmn:incoming>SequenceFlow_0wtfsdb</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_1lk6eq0</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0l7o65z</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:serviceTask id="Task_0y1fhr7" name="Xóa công văn" camunda:type="external" camunda:topic="xoaCongVan">
@@ -153,46 +130,16 @@
     <bpmn:sequenceFlow id="SequenceFlow_0lpigks" sourceRef="ExclusiveGateway_1hyhbmg" targetRef="EndEvent_1dqftzd">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${xoaCongVan}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_1lk6eq0" sourceRef="StartEvent_1" targetRef="Task_0lknw22" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="XuLyCongVanProcess">
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
-        <dc:Bounds x="397" y="337" width="36" height="36" />
+        <dc:Bounds x="723" y="337" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="382" y="380" width="67" height="27" />
+          <dc:Bounds x="708" y="380" width="67" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="SequenceFlow_0cv4ypr_di" bpmnElement="SequenceFlow_0cv4ypr">
-        <di:waypoint x="433" y="355" />
-        <di:waypoint x="476" y="355" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_0p3z7rm_di" bpmnElement="SequenceFlow_0p3z7rm">
-        <di:waypoint x="576" y="355" />
-        <di:waypoint x="625" y="355" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="UserTask_1ycez8g_di" bpmnElement="Task_13tosu6">
-        <dc:Bounds x="476" y="315" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="ServiceTask_1gkiukm_di" bpmnElement="Task_0tvxemo">
-        <dc:Bounds x="625" y="315" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="ExclusiveGateway_1kabrjf_di" bpmnElement="ExclusiveGateway_1kabrjf" isMarkerVisible="true">
-        <dc:Bounds x="762" y="330" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="SequenceFlow_09n84x1_di" bpmnElement="SequenceFlow_09n84x1">
-        <di:waypoint x="725" y="355" />
-        <di:waypoint x="762" y="355" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_02f7ik6_di" bpmnElement="SequenceFlow_02f7ik6">
-        <di:waypoint x="787" y="380" />
-        <di:waypoint x="787" y="448" />
-        <di:waypoint x="526" y="448" />
-        <di:waypoint x="526" y="395" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_0wtfsdb_di" bpmnElement="SequenceFlow_0wtfsdb">
-        <di:waypoint x="812" y="355" />
-        <di:waypoint x="863" y="355" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_0l7o65z_di" bpmnElement="SequenceFlow_0l7o65z">
         <di:waypoint x="963" y="355" />
         <di:waypoint x="1014" y="355" />
@@ -301,6 +248,10 @@
       <bpmndi:BPMNEdge id="SequenceFlow_0lpigks_di" bpmnElement="SequenceFlow_0lpigks">
         <di:waypoint x="1508" y="330" />
         <di:waypoint x="1508" y="224" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1lk6eq0_di" bpmnElement="SequenceFlow_1lk6eq0">
+        <di:waypoint x="759" y="355" />
+        <di:waypoint x="863" y="355" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
