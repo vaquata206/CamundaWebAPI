@@ -17,7 +17,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CamundaClient\CamundaClient.csproj" />
+    <ProjectReference Include="..\CamundaWebAPI.ExternalTasks\CamundaWebAPI.ExternalTasks.csproj" />
   </ItemGroup>
 
 </Project>

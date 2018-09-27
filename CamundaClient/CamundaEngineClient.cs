@@ -4,6 +4,7 @@ using System.Linq;
 using CamundaClient.Service;
 using CamundaClient.Worker;
 using CamundaClient.Dto;
+using System.Reflection;
 
 namespace CamundaClient
 {
@@ -19,11 +20,12 @@ namespace CamundaClient
         private HumanTaskWorker _humanTaskWorker;
         private EventTaskWorker _eventTaskWorker;
 
-        public CamundaEngineClient() : this(new Uri(DEFAULT_URL), null, null) { }
+        public CamundaEngineClient(string externalSolution = "") : this(new Uri(DEFAULT_URL), null, null, externalSolution) { }
 
-        public CamundaEngineClient(Uri restUrl, string userName, string password)
+        public CamundaEngineClient(Uri restUrl, string userName, string password, string externalSolution = "")
         {
             _camundaClientHelper = new CamundaClientHelper(restUrl, userName, password);
+            this.Startup(externalSolution);
         }
 
         public BpmnWorkflowService BpmnWorkflowService => new BpmnWorkflowService(_camundaClientHelper, _userTasks, _workers);
@@ -36,10 +38,10 @@ namespace CamundaClient
 
         public ProcessInstanceService ProcessInstanceService => new ProcessInstanceService(_camundaClientHelper);
 
-        public void Startup()
+        public void Startup(string externalSolution = "")
         {
             //this.ControlTasks();
-            this.StartWorkers();
+            this.StartWorkers(externalSolution);
             this.CleanEvents();
             this.RepositoryService.AutoDeploy();
         }
@@ -49,17 +51,33 @@ namespace CamundaClient
             this.StopWorkers();
         }
 
-        public void StartWorkers()
+        public void StartWorkers(string externalSolution = "")
         {
-            var assembly = System.Reflection.Assembly.GetEntryAssembly();
-            var externalTaskWorkers = RetrieveExternalTaskWorkerInfo(assembly);
-
-            foreach (var taskWorkerInfo in externalTaskWorkers)
+            try
             {
-                Console.WriteLine($"Register Task Worker for Topic '{taskWorkerInfo.TopicName}'");
-                ExternalTaskWorker worker = new ExternalTaskWorker(ExternalTaskService, taskWorkerInfo);
-                _workers.Add(worker);
-                worker.StartWork();
+                Assembly assembly = null;
+                if (string.IsNullOrEmpty(externalSolution))
+                {
+                    assembly = Assembly.GetEntryAssembly();
+                }
+                else
+                {
+                    assembly = AppDomain.CurrentDomain.GetAssemblies().Where(x => x.FullName.Contains(externalSolution)).SingleOrDefault();
+                }
+
+                var externalTaskWorkers = RetrieveExternalTaskWorkerInfo(assembly);
+
+                foreach (var taskWorkerInfo in externalTaskWorkers)
+                {
+                    Console.WriteLine($"Register Task Worker for Topic '{taskWorkerInfo.TopicName}'");
+                    ExternalTaskWorker worker = new ExternalTaskWorker(ExternalTaskService, taskWorkerInfo);
+                    _workers.Add(worker);
+                    worker.StartWork();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 
@@ -82,6 +100,7 @@ namespace CamundaClient
         private static IEnumerable<Dto.ExternalTaskWorkerInfo> RetrieveExternalTaskWorkerInfo(System.Reflection.Assembly assembly)
         {
             // find all classes with CustomAttribute [ExternalTask("name")]
+            var a = assembly.GetTypes();
             var externalTaskWorkers =
                 from t in assembly.GetTypes()
                 let externalTaskTopicAttribute = t.GetCustomAttributes(typeof(ExternalTaskTopicAttribute), true).FirstOrDefault() as ExternalTaskTopicAttribute
