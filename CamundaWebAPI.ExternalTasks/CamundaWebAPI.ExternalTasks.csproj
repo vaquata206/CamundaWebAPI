@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CamundaClient\CamundaClient.csproj" />
+    <ProjectReference Include="..\CamundaWebAPI.Core\CamundaWebAPI.Core.csproj" />
     <ProjectReference Include="..\CamundaWebAPI.Entity\CamundaWebAPI.Entity.csproj" />
     <ProjectReference Include="..\CamundaWebAPI.Repository\CamundaWebAPI.Repository.csproj" />
   </ItemGroup>
