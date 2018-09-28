@@ -42,7 +42,6 @@ namespace CamundaClient.Service
             if (response.IsSuccessStatusCode)
             {
                 var processInstance = JsonConvert.DeserializeObject<Dto.ProcessInstance>(response.Content.ReadAsStringAsync().Result);
-                result.ProcessInstanceId = processInstance.Id;
 
                 if (!string.IsNullOrEmpty(topicName))
                 {

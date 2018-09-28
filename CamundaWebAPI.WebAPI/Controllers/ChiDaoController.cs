@@ -67,9 +67,11 @@ namespace CamundaWebAPI.WebAPI.Controllers
 
                     var jChiDao = JsonConvert.SerializeObject(chiDao);
 
-                    await _client.HumanTaskService.CompleteTask(taskId, new Dictionary<string, object> {
+                    var processInstanceId = "aaaa";
+                    var topicName = "asdasd";
+                    await _client.HumanTaskService.CompleteAsync(processInstanceId ,taskId, new Dictionary<string, object> {
                         { "chiDao", jChiDao }
-                    });
+                    }, topicName);
 
                     return Ok("Completed chi dao user task!");
                 }

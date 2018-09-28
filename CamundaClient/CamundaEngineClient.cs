@@ -30,7 +30,7 @@ namespace CamundaClient
 
         public BpmnWorkflowService BpmnWorkflowService => new BpmnWorkflowService(_camundaClientHelper, _userTasks, _workers);
 
-        public HumanTaskService HumanTaskService => new HumanTaskService(_camundaClientHelper);
+        public HumanTaskService HumanTaskService => new HumanTaskService(_camundaClientHelper, _workers);
 
         public RepositoryService RepositoryService => new RepositoryService(_camundaClientHelper);
 

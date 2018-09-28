@@ -9,6 +9,8 @@ using System.Text;
 using CamundaClient.Requests;
 using Newtonsoft.Json.Serialization;
 using System.Threading.Tasks;
+using CamundaClient.Worker;
+using CamundaClient.ViewModel;
 
 namespace CamundaClient.Service
 {
@@ -16,10 +18,12 @@ namespace CamundaClient.Service
     public class HumanTaskService
     {
         private CamundaClientHelper helper;
+        private IList<ExternalTaskWorker> _workers;
 
-        public HumanTaskService(CamundaClientHelper client)
+        public HumanTaskService(CamundaClientHelper client, IList<ExternalTaskWorker> workers)
         {
             this.helper = client;
+            this._workers = workers;
         }
 
         public IList<HumanTask> LoadTasks() => LoadTasks(new Dictionary<string, string>());
@@ -131,19 +135,53 @@ namespace CamundaClient.Service
             }
         }
 
-        public async Task CompleteTask(string taskId, Dictionary<string, object> variables)
+        public async Task<TaskResponse> CompleteAsync(string processInstanceId, string taskId, Dictionary<string, object> variables, string topicName)
         {
             var request = new CompleteRequest();
             request.Variables = CamundaClientHelper.ConvertVariables(variables);
+
+            TaskResponse result = null;
 
             var http = helper.HttpClient();
             var requestContent = new StringContent(JsonConvert.SerializeObject(variables, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }), Encoding.UTF8, CamundaClientHelper.CONTENT_TYPE_JSON);
             var response = await http.PostAsync("task/" + taskId + "/complete", requestContent);
 
-            if (response.StatusCode != System.Net.HttpStatusCode.NoContent)
+            if (response.IsSuccessStatusCode)
+            {
+                if (!string.IsNullOrEmpty(topicName))
+                {
+                    var externalTask = GetExternalTaskByTopicName(topicName);
+                    if (externalTask != null)
+                    {
+                        var taskCompletionSource = new TaskCompletionSource<object>();
+                        if (externalTask.CompletionSources.ContainsKey(processInstanceId))
+                        {
+                            var list = externalTask.CompletionSources[processInstanceId] ?? new List<TaskCompletionSource<object>>();
+                            list.Add(taskCompletionSource);
+                            externalTask.CompletionSources[processInstanceId] = list;
+                        }
+                        else
+                        {
+                            externalTask.CompletionSources.Add(processInstanceId, new List<TaskCompletionSource<object>> {
+                                taskCompletionSource
+                            });
+                        }
+
+                        result = (TaskResponse)await taskCompletionSource.Task;
+                    }
+                }
+
+                return result;
+            }
+            else
             {
                 throw new EngineException("Could not load variable: " + response.ReasonPhrase);
             }
+        }
+
+        private ExternalTaskAdapter GetExternalTaskByTopicName(string topicName)
+        {
+            return _workers.Where(x => x.taskWorkerInfo.TopicName == topicName).Select(x => x.taskWorkerInfo.TaskAdapter).SingleOrDefault();
         }
     }
 
