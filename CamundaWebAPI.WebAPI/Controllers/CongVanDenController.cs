@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CamundaClient;
+using CamundaWebAPI.Entity;
+using CamundaWebAPI.Repository.IReposirory;
 using CamundaWebAPI.ViewModel.Request;
+using CamundaWebAPI.ViewModel.Response;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -12,10 +15,39 @@ namespace CamundaWebAPI.WebAPI.Controllers
     public class CongVanDenController : Controller
     {
         private CamundaEngineClient _client;
+        private IUnitOfWork _uow;
 
-        public CongVanDenController()
+        public CongVanDenController(CamundaEngineClient client, IUnitOfWork uow)
         {
-            _client = new CamundaEngineClient();
+            this._client = client;
+            this._uow = uow;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Get(string congVanId)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(congVanId))
+                {
+                    return BadRequest("The variables are not null or empty");
+                }
+
+                var congVan = await this._uow.CongVanDenRepository.GetAsync<CongVanDen>(congVanId);
+
+                var result = new BaseResponse<CongVanDen>()
+                {
+                    Message = "Get cong van",
+                    Code = 200,
+                    Result = congVan
+                };
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.ToString());
+            }
         }
 
         [HttpPost]

@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Text;
 using CamundaClient.Requests;
 using Newtonsoft.Json.Serialization;
+using System.Threading.Tasks;
 
 namespace CamundaClient.Service
 {
@@ -91,6 +92,57 @@ namespace CamundaClient.Service
             {
                 //var errorMsg = response.Content.ReadAsStringAsync();
                 throw new EngineException(response.ReasonPhrase);
+            }
+        }
+
+        public async Task<List<HumanTask>> LoadTask(string processInstanceId)
+        {
+            var http = helper.HttpClient();
+
+            var response = await http.GetAsync("task?processInstanceId=" + processInstanceId);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var taskResponse = JsonConvert.DeserializeObject<List<HumanTask>>(response.Content.ReadAsStringAsync().Result);
+
+                return taskResponse;
+            }
+            else
+            {
+                throw new EngineException("Could not load variable: " + response.ReasonPhrase);
+            }
+        }
+
+        public async Task<HumanTask> LoadTask(string processInstanceId, string taskName)
+        {
+            var http = helper.HttpClient();
+
+            var response = await http.GetAsync("task?processInstanceId=" + processInstanceId);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var taskResponse = JsonConvert.DeserializeObject<List<HumanTask>>(response.Content.ReadAsStringAsync().Result);
+
+                return taskResponse.Where(p => p.Name.Equals(taskName)).SingleOrDefault();
+            }
+            else
+            {
+                throw new EngineException("Could not load variable: " + response.ReasonPhrase);
+            }
+        }
+
+        public async Task CompleteTask(string taskId, Dictionary<string, object> variables)
+        {
+            var request = new CompleteRequest();
+            request.Variables = CamundaClientHelper.ConvertVariables(variables);
+
+            var http = helper.HttpClient();
+            var requestContent = new StringContent(JsonConvert.SerializeObject(variables, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }), Encoding.UTF8, CamundaClientHelper.CONTENT_TYPE_JSON);
+            var response = await http.PostAsync("task/" + taskId + "/complete", requestContent);
+
+            if (response.StatusCode != System.Net.HttpStatusCode.NoContent)
+            {
+                throw new EngineException("Could not load variable: " + response.ReasonPhrase);
             }
         }
     }
