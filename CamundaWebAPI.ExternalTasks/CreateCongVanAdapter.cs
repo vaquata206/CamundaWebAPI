@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using CamundaClient.Dto;
+using CamundaClient.ViewModel;
 using CamundaClient.Worker;
 using CamundaWebAPI.Core.Common;
 using CamundaWebAPI.Core.Helpers;
@@ -8,6 +9,7 @@ using CamundaWebAPI.Entity;
 using CamundaWebAPI.Repository.IReposirory;
 using CamundaWebAPI.Repository.Repository;
 using CamundaWebAPI.ViewModel.Request;
+using Newtonsoft.Json;
 
 namespace CamundaWebAPI.ExternalTasks
 {
@@ -23,21 +25,23 @@ namespace CamundaWebAPI.ExternalTasks
         private const string ResponseCode = "ResponseCode";
         #endregion
 
-        protected override void ExecuteTask(ExternalTask externalTask, ref Dictionary<string, object> resultVariables)
+        protected override ResponseInformation ExecuteTask(ExternalTask externalTask, ref Dictionary<string, object> resultVariables)
         {
-            var responseCode = Constants.ResponseCode.Created;
+            var status = ResponseInformation.Status.Successed;
             try
             {
                 var cvd = ExternalTaskHelper.GetVariable<CongVanDenRequest>(externalTask.Variables, CongVanDen);
                 if (cvd != null)
                 {
+                    cvd.CongVanDenId = Guid.NewGuid();
+
                     var now = DateTime.Now;
 
                     using (var uow = new UnitOfWork(ConfigSettings.ConnectionString))
                     {
                         var entity = new CongVanDen
                         {
-                            CongVanDenId = Guid.NewGuid(),
+                            CongVanDenId = cvd.CongVanDenId.Value,
                             SoCongVan = cvd.SoCongVan,
                             TrichYeu = cvd.TrichYeu,
                             DaXoa = false,
@@ -48,18 +52,24 @@ namespace CamundaWebAPI.ExternalTasks
                         uow.CongVanDenRepository.Add(entity);
                         uow.Commit();
                     }
+
+                    var jCongVanDen = JsonConvert.SerializeObject(cvd);
+                    resultVariables.Add(CongVanDen, jCongVanDen);
                 }
                 else
                 {
-                    responseCode = Constants.ResponseCode.Failed;
+                    status = ResponseInformation.Status.Failed;
                 }
             }
             catch (Exception ex)
             {
-                responseCode = Constants.ResponseCode.Failed;
+                status = ResponseInformation.Status.Failed;
             }
 
-            resultVariables.Add(ResponseCode, responseCode);
+            return new ResponseInformation {
+                 StatusResponse = status,
+                 Variables = resultVariables
+            };
         }
     }
 }

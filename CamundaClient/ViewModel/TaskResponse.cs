@@ -8,9 +8,9 @@ namespace CamundaClient.ViewModel
 {
     public class TaskResponse
     {
-        public string ProcessInstanceId;
+        public string ProcessInstanceId { get; set; }
 
-        public object Variables;
+        public ResponseInformation Content { get; set; }
 
         public override string ToString() => ProcessInstanceId;
     }

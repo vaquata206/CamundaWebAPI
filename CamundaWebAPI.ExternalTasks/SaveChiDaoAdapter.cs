@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using CamundaClient.Dto;
+using CamundaClient.ViewModel;
 using CamundaClient.Worker;
 using CamundaWebAPI.Core.Common;
 using CamundaWebAPI.Core.Helpers;
@@ -15,17 +16,15 @@ namespace CamundaWebAPI.ExternalTasks
     [ExternalTaskVariableRequirements("chiDao")]
     class SaveChiDaoAdapter : ExternalTaskAdapter
     {
-        #region requests
         private const string REQ_ChiDao = "chiDao";
-        #endregion
 
         #region responses
         private const string ResponseCode = "ResponseCode";
         #endregion
 
-        protected override void ExecuteTask(ExternalTask externalTask, ref Dictionary<string, object> resultVariables)
+        protected override ResponseInformation ExecuteTask(ExternalTask externalTask, ref Dictionary<string, object> resultVariables)
         {
-            var responseCode = Constants.ResponseCode.Created;
+            var responseStatus = ResponseInformation.Status.Successed;
             try
             {
                 var chiDao = ExternalTaskHelper.GetVariable<ChiDao>(externalTask.Variables, REQ_ChiDao);
@@ -58,15 +57,19 @@ namespace CamundaWebAPI.ExternalTasks
                 }
                 else
                 {
-                    responseCode = Constants.ResponseCode.Failed;
+                    responseStatus = ResponseInformation.Status.Failed;
                 }
             }
             catch (Exception ex)
             {
-                responseCode = Constants.ResponseCode.Failed;
+                responseStatus = ResponseInformation.Status.Failed;
             }
 
-            resultVariables.Add(ResponseCode, responseCode);
+            return new ResponseInformation
+            {
+                StatusResponse = responseStatus,
+                Variables = resultVariables
+            };
         }
     }
 }
