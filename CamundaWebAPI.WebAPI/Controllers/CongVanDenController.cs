@@ -11,11 +11,11 @@ namespace CamundaWebAPI.WebAPI.Controllers
     [Route("api/congvanden")]
     public class CongVanDenController : Controller
     {
-        private CamundaEngineClient _client;
+        private CamundaEngineClient _camundaClient;
 
-        public CongVanDenController()
+        public CongVanDenController(CamundaEngineClient camundaClient)
         {
-            _client = new CamundaEngineClient();
+            this._camundaClient = camundaClient;
         }
 
         [HttpPost]
@@ -32,7 +32,7 @@ namespace CamundaWebAPI.WebAPI.Controllers
 
                     var jCongVanDen = JsonConvert.SerializeObject(congVanDen);
 
-                    var taskResponse = await _client.BpmnWorkflowService.StartProcessInstanceAsync("XuLyCongVanProcess", new Dictionary<string, object>() {
+                    var taskResponse = await _camundaClient.BpmnWorkflowService.StartProcessInstanceAsync("XuLyCongVanProcess", new Dictionary<string, object>() {
                         { "congVanDen", jCongVanDen }
                     }, "taoCongVan");
 

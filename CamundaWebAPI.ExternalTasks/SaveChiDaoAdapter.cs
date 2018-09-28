@@ -7,16 +7,16 @@ using CamundaWebAPI.Core.Helpers;
 using CamundaWebAPI.Entity;
 using CamundaWebAPI.Repository.IReposirory;
 using CamundaWebAPI.Repository.Repository;
-using CamundaWebAPI.ViewModel.Request;
+using Newtonsoft.Json;
 
 namespace CamundaWebAPI.ExternalTasks
 {
-    [ExternalTaskTopic("taoCongVan")]
-    [ExternalTaskVariableRequirements("congVanDen")]
-    class CreateCongVanAdapter : ExternalTaskAdapter
+    [ExternalTaskTopic("luuChiDao")]
+    [ExternalTaskVariableRequirements("chiDao")]
+    class SaveChiDaoAdapter : ExternalTaskAdapter
     {
         #region requests
-        private const string CongVanDen = "congVanDen";
+        private const string REQ_ChiDao = "chiDao";
         #endregion
 
         #region responses
@@ -28,24 +28,31 @@ namespace CamundaWebAPI.ExternalTasks
             var responseCode = Constants.ResponseCode.Created;
             try
             {
-                var cvd = ExternalTaskHelper.GetVariable<CongVanDenRequest>(externalTask.Variables, CongVanDen);
-                if (cvd != null)
+                var chiDao = ExternalTaskHelper.GetVariable<ChiDao>(externalTask.Variables, REQ_ChiDao);
+                if (chiDao != null)
                 {
                     var now = DateTime.Now;
 
                     using (var uow = new UnitOfWork(ConfigSettings.ConnectionString))
                     {
-                        var entity = new CongVanDen
-                        {
-                            CongVanDenId = Guid.NewGuid(),
-                            SoCongVan = cvd.SoCongVan,
-                            TrichYeu = cvd.TrichYeu,
-                            DaXoa = false,
-                            TrangThai = Constants.TrangThai.InProgress,
-                            NgayTao = now
-                        };
+                        chiDao.NgayTao = now;
+                        chiDao.DaXoa = false;
+                        uow.ChiDaoRepository.Add(chiDao);
 
-                        uow.CongVanDenRepository.Add(entity);
+                        var cvpbs = JsonConvert.DeserializeObject<CongViecPhongBan[]>(chiDao.PhongBanThucHien);
+                        if (cvpbs == null || cvpbs.Length > 0)
+                        {
+                            foreach(var cvpb in cvpbs)
+                            {
+                                cvpb.CongViecPhongBanId = Guid.NewGuid();
+                                cvpb.ChiDaoId = chiDao.ChiDaoId;
+                                cvpb.TrangThai = Constants.TrangThai.InProgress;
+                                cvpb.NgayTao = now;
+                                cvpb.DaXoa = false;
+                                uow.CongViecPhongBanRepository.Add(cvpb);
+                            }
+                        }
+
                         uow.Commit();
                     }
                 }
