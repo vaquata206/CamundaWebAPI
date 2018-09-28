@@ -17,7 +17,7 @@ namespace CamundaWebAPI.ExternalTasks
     {
         #region variables
         private const string CongVanDen = "congVanDen";
-        private const string XoaCongVan = "xoaCongVan";
+        private const string Str_XoaCongVan = "xoaCongVan";
         #endregion
 
         protected override ResponseInformation ExecuteTask(ExternalTask externalTask, ref Dictionary<string, object> resultVariables)
@@ -25,9 +25,6 @@ namespace CamundaWebAPI.ExternalTasks
             var response = new ResponseInformation() {
                 StatusResponse = ResponseInformation.Status.Successed
             };
-
-            var isXoaCongVan = false;
-
 
             try
             {
@@ -46,8 +43,6 @@ namespace CamundaWebAPI.ExternalTasks
                         uow.CongVanDenRepository.Update<CongVanDen>(entity);
                         uow.Commit();
                     }
-
-                    isXoaCongVan = true;
                 }
                 else
                 {
@@ -59,7 +54,8 @@ namespace CamundaWebAPI.ExternalTasks
                 response.StatusResponse = ResponseInformation.Status.Failed;
                 response.Message = ex.ToString();
             }
-            response.Variables.Add(XoaCongVan, isXoaCongVan);
+
+            response.Variables.Add(Str_XoaCongVan, true);
             response.Variables = resultVariables;
 
             return response;

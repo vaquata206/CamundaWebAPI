@@ -18,7 +18,8 @@ namespace CamundaWebAPI.ExternalTasks
     class SaveChiDaoAdapter : ExternalTaskAdapter
     {
         #region variables
-        private const string REQ_ChiDao = "chiDao";
+        private const string Str_ChiDao = "chiDao";
+        private const string Str_XoaCongVan = "xoaCongVan";
         #endregion
 
         protected override ResponseInformation ExecuteTask(ExternalTask externalTask, ref Dictionary<string, object> resultVariables)
@@ -30,7 +31,7 @@ namespace CamundaWebAPI.ExternalTasks
 
             try
             {
-                var chiDao = ExternalTaskHelper.GetVariable<ChiDaoRequest>(externalTask.Variables, REQ_ChiDao);
+                var chiDao = ExternalTaskHelper.GetVariable<ChiDaoRequest>(externalTask.Variables, Str_ChiDao);
                 if (chiDao != null)
                 {
                     var now = DateTime.Now;
@@ -85,7 +86,9 @@ namespace CamundaWebAPI.ExternalTasks
                 response.Message = ex.ToString();
             }
 
+            resultVariables.Add(Str_XoaCongVan, false);
             response.Variables = resultVariables;
+
             return response;
         }
     }
