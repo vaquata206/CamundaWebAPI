@@ -9,6 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using CamundaWebAPI.ExternalTasks;
 using CamundaWebAPI.Core.Common;
+using CamundaWebAPI.Repository.IReposirory;
+using CamundaWebAPI.Repository.Repository;
 
 namespace CamundaWebAPI.WebAPI
 {
@@ -51,6 +53,7 @@ namespace CamundaWebAPI.WebAPI
             builder.Populate(services);
 
             builder.Register(c => new CamundaEngineClient(ExternalTaskHelper.GetCurrentDomain())).As<CamundaEngineClient>().SingleInstance();
+            builder.Register(c => new UnitOfWork(ConfigSettings.ConnectionString)).As<IUnitOfWork>().InstancePerDependency();
 
             //builder.RegisterType<CamundaEngineClient>().As<CamundaEngineClient>();
 

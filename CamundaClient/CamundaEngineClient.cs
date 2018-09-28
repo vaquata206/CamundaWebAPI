@@ -134,7 +134,7 @@ namespace CamundaClient
             {
                 worker.StopWork();
             }
-        }
+        } 
 
         // HELPER METHODS
 
