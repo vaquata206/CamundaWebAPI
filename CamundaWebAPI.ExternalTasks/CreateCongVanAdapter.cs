@@ -7,6 +7,7 @@ using CamundaWebAPI.Core.Helpers;
 using CamundaWebAPI.Entity;
 using CamundaWebAPI.Repository.IReposirory;
 using CamundaWebAPI.Repository.Repository;
+using CamundaWebAPI.ViewModel.Request;
 
 namespace CamundaWebAPI.ExternalTasks
 {
@@ -27,19 +28,24 @@ namespace CamundaWebAPI.ExternalTasks
             var responseCode = Constants.ResponseCode.Created;
             try
             {
-                var cvd = ExternalTaskHelper.GetVariable<CongVanDen>(externalTask.Variables, CongVanDen);
+                var cvd = ExternalTaskHelper.GetVariable<CongVanDenRequest>(externalTask.Variables, CongVanDen);
                 if (cvd != null)
                 {
                     var now = DateTime.Now;
 
                     using (var uow = new UnitOfWork(ConfigSettings.ConnectionString))
                     {
-                        cvd.NgayTao = now;
-                        cvd.TrangThai = Constants.TrangThai.InProgress;
-                        cvd.DaXoa = false;
-                        cvd.CongVanDenId = Guid.NewGuid();
+                        var entity = new CongVanDen
+                        {
+                            CongVanDenId = Guid.NewGuid(),
+                            SoCongVan = cvd.SoCongVan,
+                            TrichYeu = cvd.TrichYeu,
+                            DaXoa = false,
+                            TrangThai = Constants.TrangThai.InProgress,
+                            NgayTao = now
+                        };
 
-                        uow.CongVanDenRepository.Add(cvd);
+                        uow.CongVanDenRepository.Add(entity);
                         uow.Commit();
                     }
                 }
