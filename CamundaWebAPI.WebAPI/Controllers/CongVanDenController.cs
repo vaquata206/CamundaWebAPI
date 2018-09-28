@@ -36,9 +36,7 @@ namespace CamundaWebAPI.WebAPI.Controllers
                         { "congVanDen", jCongVanDen }
                     }, "taoCongVan");
 
-                    var variable = (Dictionary<String, object>) taskResponse.Variables;
-                    
-                    return Ok(Json(new { ProcessId = taskResponse.ProcessInstanceId, Message = variable["ResponseCode"].ToString() }));
+                    return Ok(Json(new { ProcessId = taskResponse.ProcessInstanceId, StatusCode = (int)taskResponse.Content.StatusResponse, Message = taskResponse.Content.Message }));
                 }
                 else
                 {
