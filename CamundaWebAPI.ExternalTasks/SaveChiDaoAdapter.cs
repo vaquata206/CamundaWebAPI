@@ -8,6 +8,7 @@ using CamundaWebAPI.Core.Helpers;
 using CamundaWebAPI.Entity;
 using CamundaWebAPI.Repository.IReposirory;
 using CamundaWebAPI.Repository.Repository;
+using CamundaWebAPI.ViewModel.Request;
 using Newtonsoft.Json;
 
 namespace CamundaWebAPI.ExternalTasks
@@ -29,28 +30,44 @@ namespace CamundaWebAPI.ExternalTasks
 
             try
             {
-                var chiDao = ExternalTaskHelper.GetVariable<ChiDao>(externalTask.Variables, REQ_ChiDao);
+                var chiDao = ExternalTaskHelper.GetVariable<ChiDaoRequest>(externalTask.Variables, REQ_ChiDao);
                 if (chiDao != null)
                 {
                     var now = DateTime.Now;
+                    chiDao.ChiDaoId = Guid.NewGuid();
 
                     using (var uow = new UnitOfWork(ConfigSettings.ConnectionString))
                     {
-                        chiDao.NgayTao = now;
-                        chiDao.DaXoa = false;
-                        uow.ChiDaoRepository.Add(chiDao);
-
-                        var cvpbs = JsonConvert.DeserializeObject<CongViecPhongBan[]>(chiDao.PhongBanThucHien);
-                        if (cvpbs == null || cvpbs.Length > 0)
+                        var chiDaoEntity = new ChiDao
                         {
-                            foreach(var cvpb in cvpbs)
+                            ChiDaoId = chiDao.ChiDaoId.Value,
+                            CongVanDenId = chiDao.CongVanDenId,
+                            NguoiChiDaoId = chiDao.NguoiChiDaoId,
+                            NgayTao = now,
+                            NoiDung = chiDao.NoiDung,
+                            PhongBanThucHien = chiDao.PhongBanThucHien,
+                            DaXoa = false
+                        };
+
+                        uow.ChiDaoRepository.Add(chiDaoEntity);
+
+                        var PhongBanIds = JsonConvert.DeserializeObject<string[]>(chiDaoEntity.PhongBanThucHien);
+
+                        if (PhongBanIds == null || PhongBanIds.Length > 0)
+                        {
+                            foreach(var phongBanId in PhongBanIds)
                             {
-                                cvpb.CongViecPhongBanId = Guid.NewGuid();
-                                cvpb.ChiDaoId = chiDao.ChiDaoId;
-                                cvpb.TrangThai = Constants.TrangThai.InProgress;
-                                cvpb.NgayTao = now;
-                                cvpb.DaXoa = false;
-                                uow.CongViecPhongBanRepository.Add(cvpb);
+                                var cvpbEntity = new CongViecPhongBan
+                                {
+                                    CongViecPhongBanId = Guid.NewGuid(),
+                                    ChiDaoId = chiDaoEntity.ChiDaoId,
+                                    TrangThai = Constants.TrangThai.InProgress,
+                                    PhongBanId = new Guid(phongBanId),
+                                    NgayTao = now,
+                                    DaXoa = false
+                                };
+                                
+                                uow.CongViecPhongBanRepository.Add(cvpbEntity);
                             }
                         }
 
