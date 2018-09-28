@@ -36,7 +36,7 @@ namespace CamundaWebAPI.WebAPI.Controllers
                     return BadRequest("The variables are not null or empty");
                 }
 
-                var taskInfo = await _client.BpmnWorkflowService.LoadTask(processId, "Chỉ đạo");
+                var taskInfo = await _client.HumanTaskService.LoadTask(processId, "Chỉ đạo");
 
                 var result = new BaseResponse<string>()
                 {
@@ -67,7 +67,7 @@ namespace CamundaWebAPI.WebAPI.Controllers
 
                     var jChiDao = JsonConvert.SerializeObject(chiDao);
 
-                    await _client.BpmnWorkflowService.CompleteTask(taskId, new Dictionary<string, object> {
+                    await _client.HumanTaskService.CompleteTask(taskId, new Dictionary<string, object> {
                         { "chiDao", jChiDao }
                     });
 

@@ -172,57 +172,6 @@ namespace CamundaClient.Service
         {
             return _workers.Where(x => x.taskWorkerInfo.TopicName == topicName).Select(x => x.taskWorkerInfo.TaskAdapter).SingleOrDefault();
         }
-
-        public async Task<List<TaskInfo>> LoadTask(string processInstanceId)
-        {
-            var http = helper.HttpClient();
-
-            var response = await http.GetAsync("task?processInstanceId=" + processInstanceId);
-
-            if (response.IsSuccessStatusCode)
-            {
-                var taskResponse = JsonConvert.DeserializeObject<List<TaskInfo>>(response.Content.ReadAsStringAsync().Result);
-
-                return taskResponse;
-            }
-            else
-            {
-                throw new EngineException("Could not load variable: " + response.ReasonPhrase);
-            }
-        }
-
-        public async Task<TaskInfo> LoadTask(string processInstanceId, string taskName)
-        {
-            var http = helper.HttpClient();
-
-            var response = await http.GetAsync("task?processInstanceId=" + processInstanceId);
-
-            if (response.IsSuccessStatusCode)
-            {
-                var taskResponse = JsonConvert.DeserializeObject<List<TaskInfo>>(response.Content.ReadAsStringAsync().Result);
-
-                return taskResponse.Where(p => p.Name.Equals(taskName)).SingleOrDefault();
-            }
-            else
-            {
-                throw new EngineException("Could not load variable: " + response.ReasonPhrase);
-            }
-        }
-
-        public async Task CompleteTask(string taskId, Dictionary<string, object> variables)
-        {
-            var request = new CompleteRequest();
-            request.Variables = CamundaClientHelper.ConvertVariables(variables);
-
-            var http = helper.HttpClient();
-            var requestContent = new StringContent(JsonConvert.SerializeObject(variables, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }), Encoding.UTF8, CamundaClientHelper.CONTENT_TYPE_JSON);
-            var response = await http.PostAsync("task/" + taskId + "/complete", requestContent);
-
-            if (response.StatusCode != System.Net.HttpStatusCode.NoContent)
-            {
-                throw new EngineException("Could not load variable: " + response.ReasonPhrase);
-            }
-        }
     }
 
 
