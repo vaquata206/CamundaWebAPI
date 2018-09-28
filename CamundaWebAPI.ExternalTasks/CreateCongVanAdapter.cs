@@ -17,17 +17,16 @@ namespace CamundaWebAPI.ExternalTasks
     [ExternalTaskVariableRequirements("congVanDen")]
     class CreateCongVanAdapter : ExternalTaskAdapter
     {
-        #region requests
+        #region variables
         private const string CongVanDen = "congVanDen";
-        #endregion
-
-        #region responses
-        private const string ResponseCode = "ResponseCode";
         #endregion
 
         protected override ResponseInformation ExecuteTask(ExternalTask externalTask, ref Dictionary<string, object> resultVariables)
         {
-            var status = ResponseInformation.Status.Successed;
+            var response = new ResponseInformation() {
+                StatusResponse = ResponseInformation.Status.Successed
+            };
+
             try
             {
                 var cvd = ExternalTaskHelper.GetVariable<CongVanDenRequest>(externalTask.Variables, CongVanDen);
@@ -58,18 +57,18 @@ namespace CamundaWebAPI.ExternalTasks
                 }
                 else
                 {
-                    status = ResponseInformation.Status.Failed;
+                    response.StatusResponse = ResponseInformation.Status.Failed;
                 }
             }
             catch (Exception ex)
             {
-                status = ResponseInformation.Status.Failed;
+                response.StatusResponse = ResponseInformation.Status.Failed;
+                response.Message = ex.ToString();
             }
 
-            return new ResponseInformation {
-                 StatusResponse = status,
-                 Variables = resultVariables
-            };
+            response.Variables = resultVariables;
+
+            return response;
         }
     }
 }

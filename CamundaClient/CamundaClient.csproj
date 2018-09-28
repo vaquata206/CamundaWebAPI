@@ -69,6 +69,7 @@
     <Compile Include="Sql\CamundaSql.cs" />
     <Compile Include="Sql\CamundaSqlManager.cs" />
     <Compile Include="Sql\CamundaTransaction.cs" />
+    <Compile Include="ViewModel\ResponseInformation.cs" />
     <Compile Include="ViewModel\TaskResponse.cs" />
     <Compile Include="Requests\CompleteRequest.cs" />
     <Compile Include="Requests\BpmnErrorRequest.cs" />

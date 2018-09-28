@@ -16,15 +16,17 @@ namespace CamundaWebAPI.ExternalTasks
     [ExternalTaskVariableRequirements("chiDao")]
     class SaveChiDaoAdapter : ExternalTaskAdapter
     {
+        #region variables
         private const string REQ_ChiDao = "chiDao";
-
-        #region responses
-        private const string ResponseCode = "ResponseCode";
         #endregion
 
         protected override ResponseInformation ExecuteTask(ExternalTask externalTask, ref Dictionary<string, object> resultVariables)
         {
-            var responseStatus = ResponseInformation.Status.Successed;
+            var response = new ResponseInformation
+            {
+                StatusResponse = ResponseInformation.Status.Successed
+            };
+
             try
             {
                 var chiDao = ExternalTaskHelper.GetVariable<ChiDao>(externalTask.Variables, REQ_ChiDao);
@@ -57,19 +59,17 @@ namespace CamundaWebAPI.ExternalTasks
                 }
                 else
                 {
-                    responseStatus = ResponseInformation.Status.Failed;
+                    response.StatusResponse = ResponseInformation.Status.Failed;
                 }
             }
             catch (Exception ex)
             {
-                responseStatus = ResponseInformation.Status.Failed;
+                response.StatusResponse = ResponseInformation.Status.Failed;
+                response.Message = ex.ToString();
             }
 
-            return new ResponseInformation
-            {
-                StatusResponse = responseStatus,
-                Variables = resultVariables
-            };
+            response.Variables = resultVariables;
+            return response;
         }
     }
 }

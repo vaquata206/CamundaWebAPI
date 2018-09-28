@@ -16,6 +16,6 @@ namespace CamundaClient.ViewModel
 
         public Status StatusResponse { get; set; }
         public string Message { get; set; }
-        public Dictionary<string, object> Variables;
+        public Dictionary<string, object> Variables { get; set; }
     }
 }

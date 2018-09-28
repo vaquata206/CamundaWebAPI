@@ -63,7 +63,7 @@ namespace CamundaClient.Service
                             });
                         }
 
-                        result.Variables = await taskCompletionSource.Task;
+                        result = (TaskResponse) await taskCompletionSource.Task;
                     }
                 }
 
