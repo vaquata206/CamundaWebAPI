@@ -25,6 +25,7 @@
   <ItemGroup>
     <ProjectReference Include="..\CamundaClient\CamundaClient.csproj" />
     <ProjectReference Include="..\CamundaWebAPI.ExternalTasks\CamundaWebAPI.ExternalTasks.csproj" />
+    <ProjectReference Include="..\CamundaWebAPI.Repository\CamundaWebAPI.Repository.csproj" />
     <ProjectReference Include="..\CamundaWebAPI.ViewModel\CamundaWebAPI.ViewModel.csproj" />
   </ItemGroup>
 
