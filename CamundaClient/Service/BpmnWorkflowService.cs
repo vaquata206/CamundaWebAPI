@@ -211,9 +211,12 @@ namespace CamundaClient.Service
 
         public async Task CompleteTask(string taskId, Dictionary<string, object> variables)
         {
+            var request = new CompleteRequest();
+            request.Variables = CamundaClientHelper.ConvertVariables(variables);
+
             var http = helper.HttpClient();
             var requestContent = new StringContent(JsonConvert.SerializeObject(variables, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }), Encoding.UTF8, CamundaClientHelper.CONTENT_TYPE_JSON);
-            var response = await http.PostAsync("message", requestContent);
+            var response = await http.PostAsync("task/" + taskId + "/complete", requestContent);
 
             if (response.StatusCode != System.Net.HttpStatusCode.NoContent)
             {

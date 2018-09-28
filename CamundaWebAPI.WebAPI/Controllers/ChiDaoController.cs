@@ -8,6 +8,7 @@ using CamundaWebAPI.Entity;
 using CamundaWebAPI.Repository.IReposirory;
 using CamundaWebAPI.Repository.Repository;
 using CamundaWebAPI.ViewModel.Request;
+using CamundaWebAPI.ViewModel.Response;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -26,18 +27,25 @@ namespace CamundaWebAPI.WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(string congVanId)
+        public async Task<IActionResult> Get(string processId)
         {
             try
             {
-                if (string.IsNullOrEmpty(congVanId))
+                if (string.IsNullOrEmpty(processId))
                 {
-                    return BadRequest(Json(new { Message = "The variables are not null or empty" }));
+                    return BadRequest("The variables are not null or empty");
                 }
 
-                var congVan = this._uow.CongVanDenRepository.GetAsync<CongVanDen>(congVanId);
+                var taskInfo = await _client.BpmnWorkflowService.LoadTask(processId, "Chỉ đạo");
 
-                return Ok());
+                var result = new BaseResponse<string>()
+                {
+                    Message = "Get task info",
+                    Code = 200,
+                    Result = taskInfo.Id
+                };
+
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -60,10 +68,10 @@ namespace CamundaWebAPI.WebAPI.Controllers
                     var jChiDao = JsonConvert.SerializeObject(chiDao);
 
                     await _client.BpmnWorkflowService.CompleteTask(taskId, new Dictionary<string, object> {
-                        { "variables", jChiDao}
+                        { "chiDao", jChiDao }
                     });
 
-                    return Ok(Json(new { Message = "Completed chi dao user task!" }));
+                    return Ok("Completed chi dao user task!");
                 }
                 else
                 {
