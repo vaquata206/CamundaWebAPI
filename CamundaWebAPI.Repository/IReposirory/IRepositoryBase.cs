@@ -5,21 +5,21 @@ using System.Threading.Tasks;
 
 namespace CamundaWebAPI.Repository.IReposirory
 {
-    public interface IRepositoryBase
+    public interface IRepositoryBase<T> where T : class
     {
-        void Add<T>(T entity) where T : class;
-        Task AddAsync<T>(T entity) where T : class;
+        void Add(T entity);
+        Task AddAsync(T entity);
 
-        void Delete<T>(T entity) where T : class;
-        Task DeleteAsync<T>(T entity) where T : class;
+        void Delete(T entity);
+        Task DeleteAsync(T entity);
 
-        void Update<T>(T entity) where T : class;
-        Task UpdateAsync<T>(T entity) where T : class;
+        void Update(T entity);
+        Task UpdateAsync(T entity);
 
-        T Get<T>(object id) where T : class;
-        Task<T> GetAsync<T>(object id) where T : class;
+        T Get(object id);
+        Task<T> GetAsync(object id);
 
-        IEnumerable<T> GetAll<T>() where T : class;
-        Task<IEnumerable<T>> GetAllAsync<T>() where T : class;
+        IEnumerable<T> GetAll();
+        Task<IEnumerable<T>> GetAllAsync();
     }
 }

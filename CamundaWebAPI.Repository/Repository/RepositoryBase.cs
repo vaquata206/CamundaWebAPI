@@ -7,7 +7,7 @@ using Dapper.Contrib.Extensions;
 
 namespace CamundaWebAPI.Repository.Repository
 {
-    public abstract class RepositoryBase: IRepositoryBase
+    public abstract class RepositoryBase<T>: IRepositoryBase<T> where T :class
     {
         protected IDbTransaction Transaction { get; private set; }
         protected IDbConnection Connection { get { return Transaction.Connection; } }
@@ -17,7 +17,7 @@ namespace CamundaWebAPI.Repository.Repository
             Transaction = transaction;
         }
 
-        public void Add<T>(T entity) where T : class
+        public void Add(T entity)
         {
             try
             {
@@ -29,7 +29,7 @@ namespace CamundaWebAPI.Repository.Repository
             }
         }
 
-        public async Task AddAsync<T>(T entity) where T : class
+        public async Task AddAsync(T entity)
         {
             try
             {
@@ -41,7 +41,7 @@ namespace CamundaWebAPI.Repository.Repository
             }
         }
 
-        public void Delete<T>(T entity) where T : class
+        public void Delete(T entity)
         {
             try
             {
@@ -53,7 +53,7 @@ namespace CamundaWebAPI.Repository.Repository
             }
         }
 
-        public async Task DeleteAsync<T>(T entity) where T : class
+        public async Task DeleteAsync(T entity)
         {
             try
             {
@@ -65,7 +65,7 @@ namespace CamundaWebAPI.Repository.Repository
             }
         }
 
-        public void Update<T>(T entity) where T : class
+        public void Update(T entity)
         {
             try
             {
@@ -77,7 +77,7 @@ namespace CamundaWebAPI.Repository.Repository
             }
         }
 
-        public async Task UpdateAsync<T>(T entity) where T : class
+        public async Task UpdateAsync(T entity)
         {
             try
             {
@@ -89,7 +89,7 @@ namespace CamundaWebAPI.Repository.Repository
             }
         }
 
-        public T Get<T>(object id) where T : class
+        public T Get(object id)
         {
             try
             {
@@ -101,7 +101,7 @@ namespace CamundaWebAPI.Repository.Repository
             }
         }
 
-        public Task<T> GetAsync<T>(object id) where T : class
+        public Task<T> GetAsync(object id)
         {
             try
             {
@@ -113,7 +113,7 @@ namespace CamundaWebAPI.Repository.Repository
             }
         }
 
-        public IEnumerable<T> GetAll<T>() where T : class
+        public IEnumerable<T> GetAll()
         {
             try
             {
@@ -125,7 +125,7 @@ namespace CamundaWebAPI.Repository.Repository
             }
         }
 
-        public Task<IEnumerable<T>> GetAllAsync<T>() where T : class
+        public Task<IEnumerable<T>> GetAllAsync()
         {
             try
             {
