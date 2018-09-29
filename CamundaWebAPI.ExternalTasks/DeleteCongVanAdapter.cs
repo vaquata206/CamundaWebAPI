@@ -33,14 +33,14 @@ namespace CamundaWebAPI.ExternalTasks
                 {
                     using (var uow = new UnitOfWork(ConfigSettings.ConnectionString))
                     {
-                        var entity = uow.CongVanDenRepository.Get<CongVanDen>(cvd.CongVanDenId);
+                        var entity = uow.CongVanDenRepository.Get(cvd.CongVanDenId);
                         if (entity == null)
                         {
                             throw new Exception("The CongVanDen is null");
                         }
 
                         entity.DaXoa = true;
-                        uow.CongVanDenRepository.Update<CongVanDen>(entity);
+                        uow.CongVanDenRepository.Update(entity);
                         uow.Commit();
                     }
                 }

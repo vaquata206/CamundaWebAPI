@@ -20,6 +20,7 @@ namespace CamundaWebAPI.Repository.Repository
         private INhanVienRepository _nhanVienRepository;
         private IPhieuGiaoViecRepository _phieuGiaoViecRepository;
         private IPhongBanRepository _phongBanRepository;
+        private ICongViecCaNhanRepository _congViecCaNhanRepository;
 
         private bool _disposed;
 
@@ -63,6 +64,11 @@ namespace CamundaWebAPI.Repository.Repository
             get { return _phongBanRepository ?? new PhongBanRepository(_transaction); }
         }
 
+        public ICongViecCaNhanRepository CongViecCaNhanRepository
+        {
+            get { return _congViecCaNhanRepository ?? new CongViecCaNhanRepository(_transaction); }
+        }
+
         public void Commit()
         {
             try
@@ -91,6 +97,7 @@ namespace CamundaWebAPI.Repository.Repository
             _nhanVienRepository = null;
             _phieuGiaoViecRepository = null;
             _phongBanRepository = null;
+            _congViecCaNhanRepository = null;
         }
 
         public void Dispose()
