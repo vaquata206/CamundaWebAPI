@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CamundaClient;
+using CamundaWebAPI.Entity;
+using CamundaWebAPI.Repository.IReposirory;
 using CamundaWebAPI.ViewModel.Request;
+using CamundaWebAPI.ViewModel.Response;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -12,10 +15,78 @@ namespace CamundaWebAPI.WebAPI.Controllers
     public class CongVanDenController : Controller
     {
         private CamundaEngineClient _camundaClient;
-
-        public CongVanDenController(CamundaEngineClient camundaClient)
+        private IUnitOfWork _uow;
+        
+        public CongVanDenController(CamundaEngineClient camundaClient, IUnitOfWork uow)
         {
             this._camundaClient = camundaClient;
+            this._uow = uow;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Gets()
+        {
+            try
+            {
+                var data = await this._uow.CongVanDenRepository.GetAllAsync();
+
+                var result = new BaseResponse<IEnumerable<CongVanDen>>()
+                {
+                    Message = "Gets OK",
+                    Code = 200,
+                    Result = data
+                };
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.ToString());
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetCongVanDen(Guid id)
+        {
+            try
+            {
+                var data = await this._uow.CongVanDenRepository.GetAsync(id);
+
+                var result = new BaseResponse<CongVanDen>()
+                {
+                    Message = "Get OK",
+                    Code = 200,
+                    Result = data
+                };
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.ToString());
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetTaskInfo(Guid processId)
+        {
+            try
+            {
+                var taskInfo = await _camundaClient.HumanTaskService.LoadTask(processId.ToString(), "Người tạo xóa công văn");
+
+                var result = new BaseResponse<string>()
+                {
+                    Message = "Get OK",
+                    Code = 200,
+                    Result = taskInfo.Id
+                };
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.ToString());
+            }
         }
 
         [HttpPost]
@@ -46,6 +117,23 @@ namespace CamundaWebAPI.WebAPI.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, Json(new { Message = ex.ToString() }));
+            }
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete(Guid taskId)
+        {
+            try
+            {
+                var data = this._uow.CongVanDenRepository.GetAsync(taskId).Result;
+
+                await this._uow.CongVanDenRepository.DeleteAsync(data);
+
+                return Ok("Delete Ok");
+            }   
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.ToString());
             }
         }
     }

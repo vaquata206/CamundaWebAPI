@@ -27,20 +27,15 @@ namespace CamundaWebAPI.WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(string processId)
+        public async Task<IActionResult> GetTaskInfo(Guid processId)
         {
             try
             {
-                if (string.IsNullOrEmpty(processId))
-                {
-                    return BadRequest("The variables are not null or empty");
-                }
-
-                var taskInfo = await _client.HumanTaskService.LoadTask(processId, "Chỉ đạo");
+                var taskInfo = await _client.HumanTaskService.LoadTask(processId.ToString(), "Chỉ đạo");
 
                 var result = new BaseResponse<string>()
                 {
-                    Message = "Get task info",
+                    Message = "Get OK",
                     Code = 200,
                     Result = taskInfo.Id
                 };
@@ -54,7 +49,7 @@ namespace CamundaWebAPI.WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] string taskId, [FromBody] ChiDaoRequest chiDao)
+        public async Task<IActionResult> Create(Guid processInstanceId, Guid taskId, [FromBody] ChiDaoRequest chiDao)
         {
             try
             {
@@ -62,18 +57,16 @@ namespace CamundaWebAPI.WebAPI.Controllers
                 {
                     if (string.IsNullOrEmpty(chiDao.NoiDung) || string.IsNullOrEmpty(chiDao.PhongBanThucHien))
                     {
-                        return BadRequest(Json(new { Message = "The variables are not null or empty" }));
+                        return BadRequest("The variables are not null or empty");
                     }
 
                     var jChiDao = JsonConvert.SerializeObject(chiDao);
-
-                    var processInstanceId = "aaaa";
-                    var topicName = "asdasd";
-                    await _client.HumanTaskService.CompleteAsync(processInstanceId ,taskId, new Dictionary<string, object> {
+                    
+                    await _client.HumanTaskService.CompleteAsync(processInstanceId, taskId, new Dictionary<string, object> {
                         { "chiDao", jChiDao }
-                    }, topicName);
+                    }, "luuChiDao");
 
-                    return Ok("Completed chi dao user task!");
+                    return Ok("Create OK");
                 }
                 else
                 {

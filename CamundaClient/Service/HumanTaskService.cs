@@ -135,7 +135,7 @@ namespace CamundaClient.Service
             }
         }
 
-        public async Task<TaskResponse> CompleteAsync(string processInstanceId, string taskId, Dictionary<string, object> variables, string topicName)
+        public async Task<TaskResponse> CompleteAsync(Guid processInstanceId, Guid taskId, Dictionary<string, object> variables, string topicName)
         {
             var request = new CompleteRequest();
             request.Variables = CamundaClientHelper.ConvertVariables(variables);
@@ -144,7 +144,7 @@ namespace CamundaClient.Service
 
             var http = helper.HttpClient();
             var requestContent = new StringContent(JsonConvert.SerializeObject(variables, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }), Encoding.UTF8, CamundaClientHelper.CONTENT_TYPE_JSON);
-            var response = await http.PostAsync("task/" + taskId + "/complete", requestContent);
+            var response = await http.PostAsync("task/" + taskId.ToString() + "/complete", requestContent);
 
             if (response.IsSuccessStatusCode)
             {
@@ -154,15 +154,15 @@ namespace CamundaClient.Service
                     if (externalTask != null)
                     {
                         var taskCompletionSource = new TaskCompletionSource<object>();
-                        if (externalTask.CompletionSources.ContainsKey(processInstanceId))
+                        if (externalTask.CompletionSources.ContainsKey(processInstanceId.ToString()))
                         {
-                            var list = externalTask.CompletionSources[processInstanceId] ?? new List<TaskCompletionSource<object>>();
+                            var list = externalTask.CompletionSources[processInstanceId.ToString()] ?? new List<TaskCompletionSource<object>>();
                             list.Add(taskCompletionSource);
-                            externalTask.CompletionSources[processInstanceId] = list;
+                            externalTask.CompletionSources[processInstanceId.ToString()] = list;
                         }
                         else
                         {
-                            externalTask.CompletionSources.Add(processInstanceId, new List<TaskCompletionSource<object>> {
+                            externalTask.CompletionSources.Add(processInstanceId.ToString(), new List<TaskCompletionSource<object>> {
                                 taskCompletionSource
                             });
                         }
