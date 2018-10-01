@@ -9,6 +9,7 @@ using CamundaWebAPI.Entity;
 using CamundaWebAPI.Repository.IReposirory;
 using CamundaWebAPI.Repository.Repository;
 using CamundaWebAPI.ViewModel.Request;
+using CamundaWebAPI.ViewModel.ViewModel;
 using Newtonsoft.Json;
 
 namespace CamundaWebAPI.ExternalTasks
@@ -30,7 +31,7 @@ namespace CamundaWebAPI.ExternalTasks
 
             try
             {
-                var pgv = ExternalTaskHelper.GetVariable<PhieuGiaoViec>(externalTask.Variables, Str_PhieuGiaoViec);
+                var pgv = ExternalTaskHelper.GetVariable<PhieuGiaoViecViewModel>(externalTask.Variables, Str_PhieuGiaoViec);
                 var pbId = Convert.ToString(externalTask.Variables[Str_congViecPhongBanId].Value);
 
                 var now = DateTime.Now;
@@ -52,7 +53,7 @@ namespace CamundaWebAPI.ExternalTasks
                     var entityCvpb_pgv = new CongViecPhongBan_PhieuGiaoViec
                     {
                         Id = Guid.NewGuid(),
-                        CongViecPhongBanId = new Guid(Str_congViecPhongBanId),
+                        CongViecPhongBanId = new Guid(pbId),
                         PhieuGiaoViecId = entityPhieuGiaoViec.PhieuGiaoViecId,
                         Loai = 0,
                         NgayTao = now,
