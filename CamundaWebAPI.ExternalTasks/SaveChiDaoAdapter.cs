@@ -6,9 +6,8 @@ using CamundaClient.Worker;
 using CamundaWebAPI.Core.Common;
 using CamundaWebAPI.Core.Helpers;
 using CamundaWebAPI.Entity;
-using CamundaWebAPI.Repository.IReposirory;
 using CamundaWebAPI.Repository.Repository;
-using CamundaWebAPI.ViewModel.Request;
+using CamundaWebAPI.ViewModel.ViewModel;
 using Newtonsoft.Json;
 
 namespace CamundaWebAPI.ExternalTasks
@@ -31,7 +30,7 @@ namespace CamundaWebAPI.ExternalTasks
 
             try
             {
-                var chiDao = ExternalTaskHelper.GetVariable<ChiDaoRequest>(externalTask.Variables, Str_ChiDao);
+                var chiDao = ExternalTaskHelper.GetVariable<ChiDaoViewModel>(externalTask.Variables, Str_ChiDao);
                 if (chiDao != null)
                 {
                     var now = DateTime.Now;
