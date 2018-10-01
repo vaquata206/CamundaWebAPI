@@ -45,7 +45,7 @@ namespace CamundaWebAPI.WebAPI.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("id")]
         public async Task<IActionResult> GetCongVanDen(Guid id)
         {
             try
@@ -67,7 +67,7 @@ namespace CamundaWebAPI.WebAPI.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("processId")]
         public async Task<IActionResult> GetTaskInfo(Guid processId)
         {
             try
