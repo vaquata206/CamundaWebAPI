@@ -141,7 +141,7 @@ namespace CamundaClient.Service
             request.Variables = CamundaClientHelper.ConvertVariables(variables);
 
             var http = helper.HttpClient();
-            var requestContent = new StringContent(JsonConvert.SerializeObject(variables, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }), Encoding.UTF8, CamundaClientHelper.CONTENT_TYPE_JSON);
+            var requestContent = new StringContent(JsonConvert.SerializeObject(request, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }), Encoding.UTF8, CamundaClientHelper.CONTENT_TYPE_JSON);
             var response = await http.PostAsync("task/" + taskId.ToString() + "/complete", requestContent);
 
             if (!response.IsSuccessStatusCode)
