@@ -49,20 +49,20 @@ namespace CamundaWebAPI.WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Guid processInstanceId, Guid taskId, [FromBody] ChiDaoRequest chiDao)
+        public async Task<IActionResult> Create([FromBody] ChiDaoRequest chiDaoRequest)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    if (string.IsNullOrEmpty(chiDao.NoiDung) || string.IsNullOrEmpty(chiDao.PhongBanThucHien))
+                    if (string.IsNullOrEmpty(chiDaoRequest.ChiDao.NoiDung) || string.IsNullOrEmpty(chiDaoRequest.ChiDao.PhongBanThucHien))
                     {
                         return BadRequest("The variables are not null or empty");
                     }
 
-                    var jChiDao = JsonConvert.SerializeObject(chiDao);
+                    var jChiDao = JsonConvert.SerializeObject(chiDaoRequest.ChiDao);
                     
-                    await _client.HumanTaskService.CompleteAsync(processInstanceId, taskId, new Dictionary<string, object> {
+                    await _client.HumanTaskService.CompleteAsync(chiDaoRequest.ProcessInstanceId, chiDaoRequest.TaskId, new Dictionary<string, object> {
                         { "chiDao", jChiDao }
                     }, "luuChiDao");
 

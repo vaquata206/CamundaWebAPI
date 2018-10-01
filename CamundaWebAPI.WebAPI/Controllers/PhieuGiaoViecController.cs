@@ -69,20 +69,20 @@ namespace CamundaWebAPI.WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Guid processInstanceId, Guid taskId, [FromBody] PhieuGiaoViecRequest phieuGiaoViec)
+        public async Task<IActionResult> Create([FromBody] PhieuGiaoViecRequest phieuGiaoViecRequest)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    if (string.IsNullOrEmpty(phieuGiaoViec.NoiDung) || string.IsNullOrEmpty(phieuGiaoViec.NhanVienThucHien))
+                    if (string.IsNullOrEmpty(phieuGiaoViecRequest.PhieuGiaoViec.NoiDung) || string.IsNullOrEmpty(phieuGiaoViecRequest.PhieuGiaoViec.NhanVienThucHien))
                     {
                         return BadRequest("The variables are not null or empty");
                     }
 
-                    var jPhieuGiaoViec = JsonConvert.SerializeObject(phieuGiaoViec);
+                    var jPhieuGiaoViec = JsonConvert.SerializeObject(phieuGiaoViecRequest.PhieuGiaoViec);
 
-                    await _client.HumanTaskService.CompleteAsync(processInstanceId, taskId, new Dictionary<string, object> {
+                    await _client.HumanTaskService.CompleteAsync(phieuGiaoViecRequest.ProcessInstanceId, phieuGiaoViecRequest.TaskId, new Dictionary<string, object> {
                         { "phieuGiaoViec", jPhieuGiaoViec }
                     }, "giaoViec");
 
@@ -100,12 +100,12 @@ namespace CamundaWebAPI.WebAPI.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update(Guid processInstanceId, Guid taskId, [FromBody] int trangThai)
+        public async Task<IActionResult> Update([FromBody] TrangThaiRequest trangThaiRequest)
         {
             try
             {
-                await _client.HumanTaskService.CompleteAsync(processInstanceId, taskId, new Dictionary<string, object> {
-                        { "thucHienPhieuGiaoViec", trangThai }
+                await _client.HumanTaskService.CompleteAsync(trangThaiRequest.ProcessInstanceId, trangThaiRequest.TaskId, new Dictionary<string, object> {
+                        { "thucHienPhieuGiaoViec", trangThaiRequest.TrangThai }
                     }, "capNhapTrangThai");
 
                 return Ok("Update OK");
