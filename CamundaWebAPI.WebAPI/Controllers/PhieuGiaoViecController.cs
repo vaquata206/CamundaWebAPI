@@ -68,6 +68,30 @@ namespace CamundaWebAPI.WebAPI.Controllers
             }
         }
 
+        [HttpGet, Route("{processId}/task/{status}")]
+        public async Task<IActionResult> GetTaskInfo(Guid processId, int status)
+        {
+            try
+            {
+                var taskName = status == 1 ? "Lãnh đạo phòng ban giao việc" : null;
+
+                var taskInfo = await _client.HumanTaskService.LoadTaskAsync(processId.ToString(), taskName);
+
+                var result = new BaseResponse<string>()
+                {
+                    Message = "Get OK",
+                    Code = 200,
+                    Result = taskInfo.Id
+                };
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.ToString());
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] PhieuGiaoViecRequest phieuGiaoViecRequest)
         {

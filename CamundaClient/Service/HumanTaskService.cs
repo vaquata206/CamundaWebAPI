@@ -127,7 +127,14 @@ namespace CamundaClient.Service
             {
                 var taskResponse = JsonConvert.DeserializeObject<List<HumanTask>>(response.Content.ReadAsStringAsync().Result);
 
-                return taskResponse.Where(p => p.Name.Equals(taskName)).SingleOrDefault();
+                if (taskName == null)
+                {
+                    return taskResponse.SingleOrDefault();
+                }
+                else
+                {
+                    return taskResponse.Where(p => p.Name.Equals(taskName)).SingleOrDefault();
+                }
             }
             else
             {
@@ -141,7 +148,7 @@ namespace CamundaClient.Service
             request.Variables = CamundaClientHelper.ConvertVariables(variables);
 
             var http = helper.HttpClient();
-            var requestContent = new StringContent(JsonConvert.SerializeObject(variables, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }), Encoding.UTF8, CamundaClientHelper.CONTENT_TYPE_JSON);
+            var requestContent = new StringContent(JsonConvert.SerializeObject(request, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }), Encoding.UTF8, CamundaClientHelper.CONTENT_TYPE_JSON);
             var response = await http.PostAsync("task/" + taskId.ToString() + "/complete", requestContent);
 
             if (!response.IsSuccessStatusCode)
@@ -158,7 +165,7 @@ namespace CamundaClient.Service
             TaskResponse result = null;
 
             var http = helper.HttpClient();
-            var requestContent = new StringContent(JsonConvert.SerializeObject(variables, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }), Encoding.UTF8, CamundaClientHelper.CONTENT_TYPE_JSON);
+            var requestContent = new StringContent(JsonConvert.SerializeObject(request, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }), Encoding.UTF8, CamundaClientHelper.CONTENT_TYPE_JSON);
             var response = await http.PostAsync("task/" + taskId.ToString() + "/complete", requestContent);
 
             if (response.IsSuccessStatusCode)
