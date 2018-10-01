@@ -83,6 +83,7 @@ namespace CamundaWebAPI.WebAPI.Controllers
                     var jPhieuGiaoViec = JsonConvert.SerializeObject(phieuGiaoViecRequest.PhieuGiaoViec);
 
                     await _client.HumanTaskService.CompleteTaskAsync(phieuGiaoViecRequest.ProcessInstanceId, phieuGiaoViecRequest.TaskId, new Dictionary<string, object> {
+                        { "congViecPhongBanId", phieuGiaoViecRequest.CongViecPhongBanId.ToString() },
                         { "phieuGiaoViec", jPhieuGiaoViec }
                     }, "giaoViec");
 

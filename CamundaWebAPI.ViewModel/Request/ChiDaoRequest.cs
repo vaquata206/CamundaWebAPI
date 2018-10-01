@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CamundaWebAPI.ViewModel.Request
 {
-    public class ChiDaoRequest : BaseRequest
+    public class ChiDaoRequest
     {
         public Guid ProcessInstanceId { get; set; }
         public Guid TaskId { get; set; }
