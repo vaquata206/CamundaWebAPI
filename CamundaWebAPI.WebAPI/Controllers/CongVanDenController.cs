@@ -16,7 +16,7 @@ namespace CamundaWebAPI.WebAPI.Controllers
     {
         private CamundaEngineClient _camundaClient;
         private IUnitOfWork _uow;
-        
+
         public CongVanDenController(CamundaEngineClient camundaClient, IUnitOfWork uow)
         {
             this._camundaClient = camundaClient;
@@ -45,7 +45,7 @@ namespace CamundaWebAPI.WebAPI.Controllers
             }
         }
 
-        [HttpGet("id")]
+        [HttpGet, Route("{id}")]
         public async Task<IActionResult> GetCongVanDen(Guid id)
         {
             try
@@ -67,12 +67,12 @@ namespace CamundaWebAPI.WebAPI.Controllers
             }
         }
 
-        [HttpGet("processId")]
+        [HttpGet, Route("{processId}/task")]
         public async Task<IActionResult> GetTaskInfo(Guid processId)
         {
             try
             {
-                var taskInfo = await _camundaClient.HumanTaskService.LoadTask(processId.ToString(), "Người tạo xóa công văn");
+                var taskInfo = await _camundaClient.HumanTaskService.LoadTaskAsync(processId.ToString(), "Người tạo xóa công văn");
 
                 var result = new BaseResponse<string>()
                 {
@@ -120,17 +120,15 @@ namespace CamundaWebAPI.WebAPI.Controllers
             }
         }
 
-        [HttpDelete]
+        [HttpDelete, Route("{taskId}")]
         public async Task<IActionResult> Delete(Guid taskId)
         {
             try
             {
-                var data = this._uow.CongVanDenRepository.GetAsync(taskId).Result;
+                await _camundaClient.HumanTaskService.CompleteTaskAsync(taskId, null);
 
-                await this._uow.CongVanDenRepository.DeleteAsync(data);
-
-                return Ok("Delete Ok");
-            }   
+                return Ok("Delete OK");
+            }
             catch (Exception ex)
             {
                 return StatusCode(500, ex.ToString());

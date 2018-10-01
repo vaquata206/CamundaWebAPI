@@ -26,12 +26,12 @@ namespace CamundaWebAPI.WebAPI.Controllers
             this._uow = uow;
         }
 
-        [HttpGet]
+        [HttpGet, Route("{processId}")]
         public async Task<IActionResult> GetTaskInfo(Guid processId)
         {
             try
             {
-                var taskInfo = await _client.HumanTaskService.LoadTask(processId.ToString(), "Chỉ đạo");
+                var taskInfo = await _client.HumanTaskService.LoadTaskAsync(processId.ToString(), "Chỉ đạo");
 
                 var result = new BaseResponse<string>()
                 {
@@ -62,7 +62,7 @@ namespace CamundaWebAPI.WebAPI.Controllers
 
                     var jChiDao = JsonConvert.SerializeObject(chiDaoRequest.ChiDao);
                     
-                    await _client.HumanTaskService.CompleteAsync(chiDaoRequest.ProcessInstanceId, chiDaoRequest.TaskId, new Dictionary<string, object> {
+                    await _client.HumanTaskService.CompleteTaskAsync(chiDaoRequest.ProcessInstanceId, chiDaoRequest.TaskId, new Dictionary<string, object> {
                         { "chiDao", jChiDao }
                     }, "luuChiDao");
 

@@ -78,15 +78,6 @@
         <bpmn:outgoing>SequenceFlow_0dp2cxf</bpmn:outgoing>
       </bpmn:parallelGateway>
       <bpmn:userTask id="UserTask_1tzwjo1" name="Người tạo xóa công văn">
-        <bpmn:extensionElements>
-          <camunda:formData>
-            <camunda:formField id="trangThai" type="boolean" defaultValue="Trang Thai">
-              <camunda:validation>
-                <camunda:constraint name="required" />
-              </camunda:validation>
-            </camunda:formField>
-          </camunda:formData>
-        </bpmn:extensionElements>
         <bpmn:incoming>SequenceFlow_0uy4xhz</bpmn:incoming>
         <bpmn:outgoing>SequenceFlow_1uagi5u</bpmn:outgoing>
       </bpmn:userTask>
