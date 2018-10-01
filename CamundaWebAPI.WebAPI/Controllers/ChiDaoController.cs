@@ -26,6 +26,28 @@ namespace CamundaWebAPI.WebAPI.Controllers
             this._uow = uow;
         }
 
+        [HttpGet, Route("{id}")]
+        public async Task<IActionResult> Get(Guid id)
+        {
+            try
+            {
+                var data = await this._uow.ChiDaoRepository.GetAsync(id);
+
+                var result = new BaseResponse<ChiDao>()
+                {
+                    Message = "Get OK",
+                    Code = 200,
+                    Result = data
+                };
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.ToString());
+            }
+        }
+
         [HttpGet, Route("{processId}")]
         public async Task<IActionResult> GetTaskInfo(Guid processId)
         {
