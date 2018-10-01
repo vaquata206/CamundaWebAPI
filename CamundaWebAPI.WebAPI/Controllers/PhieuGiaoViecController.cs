@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 
 namespace CamundaWebAPI.WebAPI.Controllers
 {
-    [Route("phieugiaoviec")]
+    [Route("api/phieugiaoviec")]
     public class PhieuGiaoViecController : Controller
     {
         private CamundaEngineClient _client;
@@ -46,8 +46,8 @@ namespace CamundaWebAPI.WebAPI.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Gets(Guid id)
+        [HttpGet, Route("{id}")]
+        public async Task<IActionResult> Get(Guid id)
         {
             try
             {
@@ -82,7 +82,8 @@ namespace CamundaWebAPI.WebAPI.Controllers
 
                     var jPhieuGiaoViec = JsonConvert.SerializeObject(phieuGiaoViecRequest.PhieuGiaoViec);
 
-                    await _client.HumanTaskService.CompleteAsync(phieuGiaoViecRequest.ProcessInstanceId, phieuGiaoViecRequest.TaskId, new Dictionary<string, object> {
+                    await _client.HumanTaskService.CompleteTaskAsync(phieuGiaoViecRequest.ProcessInstanceId, phieuGiaoViecRequest.TaskId, new Dictionary<string, object> {
+                        { "congViecPhongBanId", phieuGiaoViecRequest.CongViecPhongBanId.ToString() },
                         { "phieuGiaoViec", jPhieuGiaoViec }
                     }, "giaoViec");
 
@@ -104,7 +105,7 @@ namespace CamundaWebAPI.WebAPI.Controllers
         {
             try
             {
-                await _client.HumanTaskService.CompleteAsync(trangThaiRequest.ProcessInstanceId, trangThaiRequest.TaskId, new Dictionary<string, object> {
+                await _client.HumanTaskService.CompleteTaskAsync(trangThaiRequest.ProcessInstanceId, trangThaiRequest.TaskId, new Dictionary<string, object> {
                         { "thucHienPhieuGiaoViec", trangThaiRequest.TrangThai }
                     }, "capNhapTrangThai");
 
