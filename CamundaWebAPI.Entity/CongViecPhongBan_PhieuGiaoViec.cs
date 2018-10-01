@@ -8,6 +8,7 @@ namespace CamundaWebAPI.Entity
     [Table("CongViecPhongBan_PhieuGiaoViec")]
     public class CongViecPhongBan_PhieuGiaoViec
     {
+        [ExplicitKey]
         public Guid Id { get; set; }
         public Guid CongViecPhongBanId { get; set; }
         public Guid PhieuGiaoViecId { get; set; }

@@ -1,10 +1,11 @@
-﻿using System;
+﻿using CamundaWebAPI.ViewModel.Request;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace CamundaWebAPI.ViewModel.ViewModel
 {
-    public class ChiDaoViewModel
+    public class ChiDaoViewModel : BaseRequest
     {
         public Guid? ChiDaoId { get; set; }
         public Guid CongVanDenId { get; set; }
