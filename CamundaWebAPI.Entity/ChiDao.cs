@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace CamundaWebAPI.Entity
 {
+    [Table("ChiDao")]
     public class ChiDao: BaseEntity
     {
         public Guid ChiDaoId { get; set; }
