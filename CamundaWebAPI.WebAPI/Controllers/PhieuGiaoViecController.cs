@@ -68,14 +68,12 @@ namespace CamundaWebAPI.WebAPI.Controllers
             }
         }
 
-        [HttpGet, Route("{processId}/task/{status}")]
-        public async Task<IActionResult> GetTaskInfo(Guid processId, int status)
+        [HttpGet, Route("{processId}/task")]
+        public async Task<IActionResult> GetTaskInfo(Guid processId)
         {
             try
             {
-                var taskName = status == 1 ? "Lãnh đạo phòng ban giao việc" : null;
-
-                var taskInfo = await _client.HumanTaskService.LoadTaskAsync(processId.ToString(), taskName);
+                var taskInfo = await _client.HumanTaskService.LoadTaskAsync(processId.ToString(), null);
 
                 var result = new BaseResponse<string>()
                 {
@@ -124,14 +122,12 @@ namespace CamundaWebAPI.WebAPI.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpPut, Route("hoanthanh")]
         public async Task<IActionResult> Update([FromBody] TrangThaiRequest trangThaiRequest)
         {
             try
             {
-                await _client.HumanTaskService.CompleteTaskAsync(trangThaiRequest.ProcessInstanceId, trangThaiRequest.TaskId, new Dictionary<string, object> {
-                        { "thucHienPhieuGiaoViec", trangThaiRequest.TrangThai }
-                    }, "capNhapTrangThai");
+                await _client.HumanTaskService.CompleteTaskAsync(trangThaiRequest.ProcessInstanceId, trangThaiRequest.TaskId, null, "capNhapTrangThai");
 
                 return Ok("Update OK");
             }

@@ -8,6 +8,5 @@ namespace CamundaWebAPI.ViewModel.Request
     {
         public Guid TaskId { get; set; }
         public Guid ProcessInstanceId { get; set; }
-        public int TrangThai { get; set; }
     }
 }
