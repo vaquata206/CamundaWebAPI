@@ -99,7 +99,7 @@ namespace CamundaClient.Service
             }
         }
 
-        public async Task<List<HumanTask>> LoadTask(string processInstanceId)
+        public async Task<List<HumanTask>> LoadTaskAsync(string processInstanceId)
         {
             var http = helper.HttpClient();
 
@@ -117,7 +117,7 @@ namespace CamundaClient.Service
             }
         }
 
-        public async Task<HumanTask> LoadTask(string processInstanceId, string taskName)
+        public async Task<HumanTask> LoadTaskAsync(string processInstanceId, string taskName)
         {
             var http = helper.HttpClient();
 
@@ -135,7 +135,22 @@ namespace CamundaClient.Service
             }
         }
 
-        public async Task<TaskResponse> CompleteAsync(Guid processInstanceId, Guid taskId, Dictionary<string, object> variables, string topicName)
+        public async Task CompleteTaskAsync(Guid taskId, Dictionary<string, object> variables)
+        {
+            var request = new CompleteRequest();
+            request.Variables = CamundaClientHelper.ConvertVariables(variables);
+
+            var http = helper.HttpClient();
+            var requestContent = new StringContent(JsonConvert.SerializeObject(variables, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }), Encoding.UTF8, CamundaClientHelper.CONTENT_TYPE_JSON);
+            var response = await http.PostAsync("task/" + taskId.ToString() + "/complete", requestContent);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new EngineException("Could not load variable: " + response.ReasonPhrase);
+            }
+        }
+
+        public async Task<TaskResponse> CompleteTaskAsync(Guid processInstanceId, Guid taskId, Dictionary<string, object> variables, string topicName)
         {
             var request = new CompleteRequest();
             request.Variables = CamundaClientHelper.ConvertVariables(variables);
