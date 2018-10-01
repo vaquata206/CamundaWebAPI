@@ -48,6 +48,11 @@ namespace CamundaWebAPI.ExternalTasks
 
                             var phieuGiaoViec = uow.PhieuGiaoViecRepository.GetByCongViecPhongBan(cvpb.CongViecPhongBanId).Result;
                             phieuGiaoViec.TrangThai = Constants.TrangThai.Done;
+                            uow.PhieuGiaoViecRepository.Update(phieuGiaoViec);
+
+                            var cvcn = uow.CongViecCaNhanRepository.GetByPhieuGiaoViec(phieuGiaoViec.PhieuGiaoViecId).Result;
+                            cvcn.TrangThai = Constants.TrangThai.Done;
+                            uow.CongViecCaNhanRepository.Update(cvcn);
                         }
 
                         uow.Commit();
