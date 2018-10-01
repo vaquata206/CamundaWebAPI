@@ -33,7 +33,7 @@ namespace CamundaWebAPI.ExternalTasks
                 {
                     using (var uow = new UnitOfWork(ConfigSettings.ConnectionString))
                     {
-                        var entity = uow.CongVanDenRepository.Get(cvd.CongVanDenId);
+                        var entity = uow.CongVanDenRepository.Get(cvd.CongVanDenId.Value);
                         if (entity == null)
                         {
                             throw new Exception("The CongVanDen is null");
@@ -55,7 +55,7 @@ namespace CamundaWebAPI.ExternalTasks
                 response.Message = ex.ToString();
             }
 
-            response.Variables.Add(Str_XoaCongVan, true);
+            resultVariables.Add(Str_XoaCongVan, true);
             response.Variables = resultVariables;
 
             return response;
