@@ -127,7 +127,14 @@ namespace CamundaClient.Service
             {
                 var taskResponse = JsonConvert.DeserializeObject<List<HumanTask>>(response.Content.ReadAsStringAsync().Result);
 
-                return taskResponse.Where(p => p.Name.Equals(taskName)).SingleOrDefault();
+                if (taskName == null)
+                {
+                    return taskResponse.SingleOrDefault();
+                }
+                else
+                {
+                    return taskResponse.Where(p => p.Name.Equals(taskName)).SingleOrDefault();
+                }
             }
             else
             {
