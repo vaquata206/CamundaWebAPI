@@ -40,5 +40,27 @@ namespace CamundaWebAPI.WebAPI.Controllers
                 return StatusCode(500, ex.ToString());
             }
         }
+
+        [HttpGet, Route("{id}/congvieccanhan")]
+        public async Task<IActionResult> GetDsPhieuGiaoViec(Guid id)
+        {
+            try
+            {
+                var data = await this._uow.CongViecCaNhanRepository.GetDsCongViecCaNhanByCaNhanIdAsync(id);
+
+                var result = new BaseResponse<IEnumerable<CongViecCaNhanResponse>>()
+                {
+                    Message = "Gets OK",
+                    Code = 200,
+                    Result = data
+                };
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.ToString());
+            }
+        }
     }
 }

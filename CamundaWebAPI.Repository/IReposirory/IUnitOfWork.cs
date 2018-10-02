@@ -13,6 +13,7 @@ namespace CamundaWebAPI.Repository.IReposirory
         INhanVienRepository NhanVienRepository { get; }
         IPhieuGiaoViecRepository PhieuGiaoViecRepository { get; }
         IPhongBanRepository PhongBanRepository { get; }
+        ICongViecCaNhanRepository CongViecCaNhanRepository { get; }
 
         void Commit();
     }
