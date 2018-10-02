@@ -28,8 +28,8 @@ namespace CamundaWebAPI.WebAPI.Controllers
         {
             try
             {
-                var data = await this._uow.CongVanDenRepository.GetAllAsync();
-
+                var data = await this._uow.CongVanDenRepository.GetDsCongVanDenAsync();
+                
                 var result = new BaseResponse<IEnumerable<CongVanDen>>()
                 {
                     Message = "Gets OK",
