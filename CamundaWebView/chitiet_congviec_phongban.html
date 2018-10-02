@@ -40,7 +40,7 @@
                             </ul>
                         </div>
                         <div>
-                            <a href="chidao_congvan.html" target="_blank" class="btn btn-success">Giao việc</a>  
+                            <a href="giaoviec.html" target="_blank" class="btn btn-success">Giao việc</a>  
                         </div>
                     </form>
                 </div>
@@ -53,7 +53,7 @@
         $(function(){
 			var hosturl = "https://localhost:44374/api";
             var id = getUrlVars()["id"];
-
+			$(".panel-body a").attr("href", "giaoviec.html?id="+id);
             // Chi tiết công văn
             function getUrlVars()
             {
