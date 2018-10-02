@@ -45,13 +45,72 @@
                             <label for="phongbanthuchien">Phòng ban thực hiện</label>
                             <input type="text" name="phongbanThuchien" class="form-control" value="35c91ae0-8e28-4036-8561-c37f70cd56f7" id="phongbanthuchien" readonly="readonly">
                         </div>
-                        <button type="submit" class="btn btn-primary">Chỉ đạo</button>
+                        <button type="button" class="btn btn-primary">Chỉ đạo</button>
                     </form>                     
                 </div>
             </div>
         </div>
         <div class="bfooter text-center">Design by camunda-Team</div>
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script type="text/javascript" src="./plugins/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+        <script type="text/javascript">
+        $(function(){
+            var id = getUrlVars()["id"];
+            var processId = getUrlVars()["processId"];
+            $("input[name='congvandenId']").attr("value", id);
+            $("input[name='proccessTaskId']").attr("value", processId);
+
+            // get taskId
+            $.ajax({
+                type: "GET",
+                url: "https://localhost:44374/api/chidao/"+ processId + "/task",
+                contentType: "application/json",
+                success: function (repoData, textStatus, jqXHR) {
+                    $("input[name='taskId']").attr("value", repoData.result);
+                }
+            });
+
+            // Thêm chỉ đạo
+            $("button").click(function(e){
+                e.preventDefault();
+                var formData = {
+                    "ProcessInstanceId": $("input[name='proccessTaskId']").val(),
+                    "TaskId": $("input[name='taskId']").val(),
+                    "ChiDao": {
+                        "CongVanDenId": $("input[name='congvandenId']").val(),
+                        "NoiDung": $("textarea[name='noidungChidao']").val(),
+                        "NguoiChiDaoId": $("input[name='nguoiChidao']").val(),
+                        "PhongBanThucHien": "[\"" + $("input[name='phongbanThuchien']").val() + "\"]"
+                    }
+                };
+                debugger
+                $.ajax({
+                    type: "POST",
+                    url: "https://localhost:44374/api/chidao",
+                    contentType: "application/json",
+                    data: JSON.stringify(formData),
+                    success: function (responseData, textStatus, jqXHR) {
+                        alert(responseData);
+                    },
+                    error: function (responseData, textStatus, errorThrown) {
+                        alert("Lỗi!");
+                    }
+                });                
+            });
+
+            function getUrlVars()
+            {
+                var vars = [], hash;
+                var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+                for(var i = 0; i < hashes.length; i++)
+                {
+                    hash = hashes[i].split('=');
+                    vars.push(hash[0]);
+                    vars[hash[0]] = hash[1];
+                }
+                return vars;
+            };
+        });
+        </script>
     </body>
 </html>

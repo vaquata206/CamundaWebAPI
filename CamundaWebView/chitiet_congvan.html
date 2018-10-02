@@ -21,7 +21,7 @@
                             Chi tiết công văn
                         </div>
                         <div class="pull-right">
-                            <a href="index.html" target="_blank" class="btn btn-default btn-xs">Danh sách công văn đến</a>
+                            <a href="index.html" class="btn btn-default btn-xs">Danh sách công văn đến</a>
                         </div>
                     </div>
                 </div>
@@ -41,7 +41,7 @@
                         </div>
                         <div>
                             <button class="btn btn-danger">Xóa công văn</button>
-                            <a href="chidao_congvan.html" target="_blank" class="btn btn-success">Chỉ đạo</a>  
+                            <a id="urlchidao" href="" target="_blank" class="btn btn-success">Chỉ đạo</a>  
                         </div>
                     </form>
                 </div>
@@ -68,9 +68,9 @@
                     $("#chitietcongvan ul li:nth-child(5)").html(responseData.result.soCongVan);
                     $("#chitietcongvan ul li:nth-child(6)").html(responseData.result.trangThai);
                     $("#chitietcongvan ul li:nth-child(7)").html(responseData.result.trichYeu);
+                    $("#urlchidao").attr("href", "chidao_congvan.html?id=" + responseData.result.congVanDenId + "&processId=" + responseData.result.processInstanceId);
                     // Get taskID
                     var processInstanceId = responseData.result.processInstanceId;
-                    debugger;
                     $.ajax({
                         type: "GET",
                         url: "https://localhost:44374/api/congvanden/"+ processInstanceId + "/task",

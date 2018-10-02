@@ -61,6 +61,7 @@
                     success: function (responseData, textStatus, jqXHR) {
                         alert("CongVanDenId = " + responseData.value.processId);
                         $("#taocongvanForm input").val("");
+                        window.location = "index.html";
                     },
                     error: function (responseData, textStatus, errorThrown) {
                         alert("Lỗi!");
