@@ -35,6 +35,9 @@ namespace CamundaWebAPI.WebAPI
         // called by the runtime before the Configure method, below.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options => options.AddPolicy("AllowAll", p => p.AllowAnyOrigin()
+                                                                    .AllowAnyMethod()
+                                                                     .AllowAnyHeader()));
             // Add services to the collection.
             services.AddMvc();
 
@@ -74,8 +77,9 @@ namespace CamundaWebAPI.WebAPI
             loggerFactory.AddConsole(this.Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            app.UseMvc();
+            app.UseCors("AllowAll");
 
+            app.UseMvc();
             // As of Autofac.Extensions.DependencyInjection 4.3.0 the AutofacDependencyResolver
             // implements IDisposable and will be disposed - along with the application container -
             // when the app stops and the WebHost disposes it.
