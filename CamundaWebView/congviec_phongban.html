@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>Danh sách công việc phòng ban</title>
+        <title>Công việc phòng ban</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" type="text/css" href="./plugins/bootstrap-3.3.7-dist/css/bootstrap.min.css">
@@ -13,44 +13,35 @@
     </head>
     <body>
         <div class="container">
-            <h1>Danh sách công việc phòng ban</h1>
+            <h1>Công việc phòng ban</h1>
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="refix">
                         <div class="pull-left">
-                            Công việc phòng ban
+                            Danh sách công việc phòng ban
                         </div>
                         <div class="pull-right">
-                            <button class="btn btn-default btn-xs">Thêm mới</button>
+                            <a href="tao_congviecphongban.html" class="btn btn-default btn-xs">Thêm mới</a>
                         </div>
                     </div>
                 </div>
-                <div class="panel-body">
+                <div class="panel-body" id="phongban">
                     <div class="table-reponsive">
                         <table class="table table-bordered table-striped">
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Tên</th>
+                                    <th>Công văn đến id</th>
+                                    <th>Số công văn</th>
+                                    <th>Trích yếu</th>
+                                    <th>Trạng thái</th>
+                                    <th>Ngày tạo</th>
+                                    <th>ProcessInstanceId</th>
+                                    <th>Xóa</th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <th>1</th>
-                                    <th>Công việc 1</th>
-                                    <th><button class="btn btn-primary btn-xs">Chi tiết</button></th>
-                                </tr>
-                                <tr>
-                                    <th>2</th>
-                                    <th>Công việc 2</th>
-                                    <th><button class="btn btn-primary btn-xs">Chi tiết</button></th>
-                                </tr>
-                                <tr>
-                                    <th>3</th>
-                                    <th>Công việc 3</th>
-                                    <th><button class="btn btn-primary btn-xs">Chi tiết</button></th>
-                                </tr>
                             </tbody>
                             <tfoot colspan="3"></tfoot>
                         </table>
@@ -58,8 +49,78 @@
                 </div>
             </div>
         </div>
+        <table class="table-clone" style="display: none;">
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><a href="" class="btn btn-primary btn-xs">Chi tiết</a></td>
+                </tr>
+            </tbody>
+        </table>
         <div class="bfooter text-center">Design by camunda-Team</div>
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script type="text/javascript" src="./plugins/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+        <script type="text/javascript">
+            $(function(){
+                var controller = {
+                    HTML: {
+                        clonetable: ".table-clone tbody tr",
+                        clonelist: "td"
+                    },
+                    RESULT:{
+                        tableresult: "#phongban tbody"
+                    }
+                };
+
+                var phongbanId = getUrlVars()["id"];
+
+                // Get công việc phòng ban
+                $.ajax({
+                    type: "GET",
+                    url: "https://localhost:44374/api/congviecphongban" + phongbanId,
+                    contentType: "application/json; charset=utf-8",
+                    success: function (responseData, textStatus, jqXHR) {
+                        debugger;
+                        for(var i = 0; i < responseData.result.length; i++){
+                            var cloneTable = $(controller.HTML.clonetable);
+                            box = cloneTable.clone(true, true);
+                            box.find(controller.HTML.clonelist + ":nth-child(1)").html(i);
+                            box.find(controller.HTML.clonelist + ":nth-child(2)").html(responseData.result[i].congVanDenId);
+                            box.find(controller.HTML.clonelist + ":nth-child(3)").html(responseData.result[i].soCongVan);
+                            box.find(controller.HTML.clonelist + ":nth-child(4)").html(responseData.result[i].trichYeu);
+                            box.find(controller.HTML.clonelist + ":nth-child(5)").html(responseData.result[i].trangThai);
+                            box.find(controller.HTML.clonelist + ":nth-child(7)").html(responseData.result[i].processInstanceId);
+                            box.find(controller.HTML.clonelist + ":nth-child(8)").html(responseData.result[i].daXoa? "1":"0");
+                            box.find(controller.HTML.clonelist + ":nth-child(9) a").attr("href", "chitiet_congvan.html?id=" + responseData.result[i].congVanDenId);
+                            /*box.find(controller.HTML.clonelist + ":nth-child(2)").attr("", "");*/
+                            box.prependTo(controller.RESULT.tableresult);
+                        }
+                    },
+                    error: function (responseData, textStatus, errorThrown) {
+                    }
+                });
+
+                // get url data
+                function getUrlVars()
+                {
+                    var vars = [], hash;
+                    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+                    for(var i = 0; i < hashes.length; i++)
+                    {
+                        hash = hashes[i].split('=');
+                        vars.push(hash[0]);
+                        vars[hash[0]] = hash[1];
+                    }
+                    return vars;
+                };
+            });
+        </script>
     </body>
 </html>
