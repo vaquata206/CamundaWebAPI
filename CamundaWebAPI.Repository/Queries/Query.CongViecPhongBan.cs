@@ -34,8 +34,10 @@ namespace CamundaWebAPI.Repository.Queries
 	                       ,cd.NgayTao as NgayTao
 	                       ,cd.NgaySua as NgaySua
 	                       ,cd.DaXoa as DaXoa
+						   ,cvd.ProcessInstanceId as ProcessInstanceId
                       FROM [CongViecPhongBans] as cvpb
                       inner join [ChiDao] as cd on cvpb.ChiDaoId = cd.ChiDaoId
+                      inner join [CongVanDens] as cvd on cvd.CongVanDenId = cd.CongVanDenId
                       WHERE cvpb.CongViecPhongBanId = @CongViecPhongBanId";
     }
 }
