@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Chi tiết công văn</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="./plugins/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="./plugins/bootstrap-3.3.7-dist/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" type="text/css" href="./plugins/font-awesome-4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="./css/common.css">
+    </head>
+    <body>
+        <div class="container">
+            <h2>Chi tiết công văn</h2>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="refix">
+                        <div class="pull-left">
+                            Chi tiết công văn
+                        </div>
+                        <div class="pull-right">
+                            <a href="index.html" target="_blank" class="btn btn-default btn-xs">Danh sách công văn đến</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <form action="" method="">
+                        <input type="hidden" name="taskId" value=""></input>
+                        <div id="chitietcongvan">
+                            <ul>
+                                <li></li>
+                                <li></li>
+                                <li></li>
+                                <li></li>
+                                <li></li>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <button class="btn btn-danger">Xóa công văn</button>
+                            <a href="chidao_congvan.html" target="_blank" class="btn btn-success">Chỉ đạo</a>  
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="bfooter text-center">Design by camunda-Team</div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script type="text/javascript" src="./plugins/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+        <script type="text/javascript">
+        $(function(){
+            var id = getUrlVars()["id"];
+
+            // Chi tiết công văn
+            $.ajax({
+                type: "GET",
+                url: "https://localhost:44374/api/congvanden/"+ id,
+                contentType: "application/json",
+                success: function (responseData, textStatus, jqXHR) {
+                    // debugger;
+                    $("#chitietcongvan ul li:nth-child(1)").html(responseData.result.congVanDenId);
+                    $("#chitietcongvan ul li:nth-child(2)").html(responseData.result.daXoa);
+                    $("#chitietcongvan ul li:nth-child(3)").html(responseData.result.ngayTao);
+                    $("#chitietcongvan ul li:nth-child(4)").html(responseData.result.processInstanceId);
+                    $("#chitietcongvan ul li:nth-child(5)").html(responseData.result.soCongVan);
+                    $("#chitietcongvan ul li:nth-child(6)").html(responseData.result.trangThai);
+                    $("#chitietcongvan ul li:nth-child(7)").html(responseData.result.trichYeu);
+                    // Get taskID
+                    var processInstanceId = responseData.result.processInstanceId;
+                    debugger;
+                    $.ajax({
+                        type: "GET",
+                        url: "https://localhost:44374/api/congvanden/"+ processInstanceId + "/task",
+                        contentType: "application/json",
+                        success: function (repoData, textStatus, jqXHR) {
+                            debugger;
+                            $("input[name='taskId']").attr("value", repoData.result);
+                        }
+                    });
+                },
+                error: function (responseData, textStatus, errorThrown) {
+                    alert("Lỗi!");
+                }
+            });            
+
+            // Xóa công văn
+            $("button").click(function(e){
+                e.preventDefault();
+                var taskId = $("input[name='taskId']").val();
+                $.ajax({
+                    type: "DELETE",
+                    url: "https://localhost:44374/api/congvanden/" + taskId,
+                    contentType: "application/json",
+                    success: function (responseData, textStatus, jqXHR) {
+                        alert("Thành công!");
+                        window.location = "index.html";
+                    },
+                    error: function (responseData, textStatus, errorThrown) {
+                        alert("Lỗi!");
+                    }
+                });                
+            });
+
+            function getUrlVars()
+            {
+                var vars = [], hash;
+                var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+                for(var i = 0; i < hashes.length; i++)
+                {
+                    hash = hashes[i].split('=');
+                    vars.push(hash[0]);
+                    vars[hash[0]] = hash[1];
+                }
+                return vars;
+            };
+        });
+        </script>
+    </body>
+</html>

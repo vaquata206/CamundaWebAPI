@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Danh sách công văn</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="./plugins/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="./plugins/bootstrap-3.3.7-dist/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" type="text/css" href="./plugins/font-awesome-4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="./css/common.css">
+    </head>
+    <body>
+        <div class="container">
+            <h1>Danh sách công văn</h1>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="refix">
+                        <div class="pull-left">
+                            Danh sách công văn
+                        </div>
+                        <div class="pull-right">
+                            <a href="tao_congvanden.html" target="_blank" class="btn btn-default btn-xs">Thêm mới</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body" id="congvan">
+                    <div class="table-reponsive">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Công văn đến id</th>
+                                    <th>Số công văn</th>
+                                    <th>Trích yếu</th>
+                                    <th>Trạng thái</th>
+                                    <th>Ngày tạo</th>
+                                    <th>ProcessInstanceId</th>
+                                    <th>Xóa</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                            <tfoot colspan="3"></tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <table class="table-clone" style="display: none;">
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><a href="" target="_blank" class="btn btn-primary btn-xs">Chi tiết</a></td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="bfooter text-center">Design by camunda-Team</div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script type="text/javascript" src="./plugins/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+        <script type="text/javascript">
+            $(function(){
+                var controller = {
+                    URL: {
+                        congvanden: "https://localhost:44374/api/congvanden"
+                    },
+                    HTML: {
+                        clonetable: ".table-clone tbody tr",
+                        clonelist: "td"
+                    },
+                    RESULT:{
+                        tableresult: "#congvan tbody"
+                    }
+                };
+                $.ajax({
+                    type: "GET",
+                    url: controller.URL.congvanden,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (responseData, textStatus, jqXHR) {
+                        for(var i = 0; i < responseData.result.length; i++){
+                            var cloneTable = $(controller.HTML.clonetable);
+                            box = cloneTable.clone(true, true);
+                            box.find(controller.HTML.clonelist + ":nth-child(1)").html(i);
+                            box.find(controller.HTML.clonelist + ":nth-child(2)").html(responseData.result[i].congVanDenId);
+                            box.find(controller.HTML.clonelist + ":nth-child(3)").html(responseData.result[i].soCongVan);
+                            box.find(controller.HTML.clonelist + ":nth-child(4)").html(responseData.result[i].trichYeu);
+                            box.find(controller.HTML.clonelist + ":nth-child(5)").html(responseData.result[i].trangThai);
+                            box.find(controller.HTML.clonelist + ":nth-child(7)").html(responseData.result[i].processInstanceId);
+                            box.find(controller.HTML.clonelist + ":nth-child(8)").html(responseData.result[i].daXoa? "1":"0");
+                            box.find(controller.HTML.clonelist + ":nth-child(9) a").attr("href", "chitiet_congvan.html?id=" + responseData.result[i].congVanDenId);
+                            /*box.find(controller.HTML.clonelist + ":nth-child(2)").attr("", "");*/
+                            box.prependTo(controller.RESULT.tableresult);
+                        }
+                    },
+                    error: function (responseData, textStatus, errorThrown) {
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>

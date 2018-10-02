@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Chỉ đạo công văn</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="./plugins/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="./plugins/bootstrap-3.3.7-dist/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" type="text/css" href="./plugins/font-awesome-4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="./css/common.css">
+    </head>
+    <body>
+        <div class="container">
+            <h2>Chỉ đạo công văn</h2>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="refix">
+                        <div class="pull-left">
+                            Chỉ đạo công văn
+                        </div>
+                        <div class="pull-right">
+                            <a href="index.html" target="_blank" class="btn btn-default btn-xs">Danh sách công văn đến</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <form action="" method="">
+                        <input type="hidden" name="proccessTaskId" value="0">
+                        <input type="hidden" name="taskId" value="1">
+                        <div class="form-group">
+                            <label for="congvandenid">Công văn đến Id</label>
+                            <input type="text" name="congvandenId" value="1" class="form-control" id="congvandenid" readonly="">
+                        </div>
+                        <div class="form-group">
+                            <label for="noidungchidao">Nội dung</label>
+                            <textarea name="noidungChidao" class="form-control" rows="4" id="noidungchidao"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="nguoichidao">Người chỉ đạo</label>
+                            <input type="text" name="nguoiChidao" class="form-control" value="657fef22-060d-4ec1-ad09-2443499a417b" id="nguoichidao" readonly="readonly">
+                        </div>
+                        <div class="form-group">
+                            <label for="phongbanthuchien">Phòng ban thực hiện</label>
+                            <input type="text" name="phongbanThuchien" class="form-control" value="35c91ae0-8e28-4036-8561-c37f70cd56f7" id="phongbanthuchien" readonly="readonly">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Chỉ đạo</button>
+                    </form>                     
+                </div>
+            </div>
+        </div>
+        <div class="bfooter text-center">Design by camunda-Team</div>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+        <script type="text/javascript" src="./plugins/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+    </body>
+</html>
