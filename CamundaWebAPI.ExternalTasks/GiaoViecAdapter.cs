@@ -23,12 +23,8 @@ namespace CamundaWebAPI.ExternalTasks
         private const string Str_congViecPhongBanId = "congViecPhongBanId";
         #endregion
 
-        protected override ResponseInformation ExecuteTask(ExternalTask externalTask, ref Dictionary<string, object> resultVariables)
+        protected override Dictionary<string, object> ExecuteTask(ExternalTask externalTask, ref Dictionary<string, object> resultVariables)
         {
-            var response = new ResponseInformation() {
-                StatusResponse = ResponseInformation.Status.Successed
-            };
-
             try
             {
                 var pgv = ExternalTaskHelper.GetVariable<PhieuGiaoViecViewModel>(externalTask.Variables, Str_PhieuGiaoViec);
@@ -83,16 +79,13 @@ namespace CamundaWebAPI.ExternalTasks
 
                     uow.Commit();
                 }
+
+                return resultVariables;
             }
             catch (Exception ex)
             {
-                response.StatusResponse = ResponseInformation.Status.Failed;
-                response.Message = ex.ToString();
+                throw ex;
             }
-
-            response.Variables = resultVariables;
-
-            return response;
         }
     }
 }

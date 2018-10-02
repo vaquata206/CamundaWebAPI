@@ -21,12 +21,8 @@ namespace CamundaWebAPI.ExternalTasks
         private const string CongVanDen = "congVanDen";
         #endregion
 
-        protected override ResponseInformation ExecuteTask(ExternalTask externalTask, ref Dictionary<string, object> resultVariables)
+        protected override Dictionary<string, object> ExecuteTask(ExternalTask externalTask, ref Dictionary<string, object> resultVariables)
         {
-            var response = new ResponseInformation() {
-                StatusResponse = ResponseInformation.Status.Successed
-            };
-
             try
             {
                 var cvd = ExternalTaskHelper.GetVariable<CongVanDenRequest>(externalTask.Variables, CongVanDen);
@@ -45,7 +41,8 @@ namespace CamundaWebAPI.ExternalTasks
                             TrichYeu = cvd.TrichYeu,
                             DaXoa = false,
                             TrangThai = Constants.TrangThai.InProgress,
-                            NgayTao = now
+                            NgayTao = now,
+                            ProcessInstanceId = new Guid(externalTask.ProcessInstanceId)
                         };
 
                         uow.CongVanDenRepository.Add(entity);
@@ -57,18 +54,15 @@ namespace CamundaWebAPI.ExternalTasks
                 }
                 else
                 {
-                    response.StatusResponse = ResponseInformation.Status.Failed;
+                    throw new Exception("The CongVanDen is Null");
                 }
+
+                return resultVariables;
             }
             catch (Exception ex)
             {
-                response.StatusResponse = ResponseInformation.Status.Failed;
-                response.Message = ex.ToString();
+                throw ex;
             }
-
-            response.Variables = resultVariables;
-
-            return response;
         }
     }
 }
