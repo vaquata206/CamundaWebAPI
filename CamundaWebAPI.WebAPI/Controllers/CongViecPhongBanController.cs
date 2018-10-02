@@ -19,17 +19,39 @@ namespace CamundaWebAPI.WebAPI.Controllers
             this._uow = uow;
         }
 
-        [HttpGet, Route("{phongBanId}")]
-        public async Task<IActionResult> Get(Guid phongBanId)
+        [HttpGet, Route("phongban/{phongBanId}")]
+        public async Task<IActionResult> Gets(Guid phongBanId)
         {
             try
             {
-                var data = await this._uow.CongViecPhongBanRepository.GetCongViecPhongBanByPhongBanIdAsync(phongBanId);
+                var data = await this._uow.CongViecPhongBanRepository.GetDsCongViecPhongBanByPhongBanIdAsync(phongBanId);
 
-                var result = new BaseResponse<IEnumerable<CongViecPhongBan>>()
+                var result = new BaseResponse<IEnumerable<CongViecPhongBanResponse>>()
                 {
                     Message = "Get OK",
                     Code = 200,     
+                    Result = data
+                };
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.ToString());
+            }
+        }
+
+        [HttpGet, Route("{id}")]
+        public async Task<IActionResult> Get(Guid id)
+        {
+            try
+            {
+                var data = await this._uow.CongViecPhongBanRepository.GetCongViecPhongBanByIdAsync(id);
+
+                var result = new BaseResponse<CongViecPhongBanResponse>()
+                {
+                    Message = "Get OK",
+                    Code = 200,
                     Result = data
                 };
 
