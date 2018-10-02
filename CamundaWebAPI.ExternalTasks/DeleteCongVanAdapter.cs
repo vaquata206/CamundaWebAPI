@@ -45,6 +45,7 @@ namespace CamundaWebAPI.ExternalTasks
                     throw new Exception("The CongVanDen is null");
                 }
 
+                resultVariables.Add("xoaCongVan", true);
                 return resultVariables;
             }
             catch (Exception ex)

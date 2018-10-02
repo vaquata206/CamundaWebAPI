@@ -74,6 +74,8 @@ namespace CamundaWebAPI.ExternalTasks
                     throw new Exception("The ChiDao is null");
                 }
 
+                resultVariables.Add("xoaCongVan", false);
+
                 return resultVariables;
             }
             catch (Exception ex)
