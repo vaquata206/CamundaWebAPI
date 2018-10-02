@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CamundaWebAPI.Entity\CamundaWebAPI.Entity.csproj" />
+    <ProjectReference Include="..\CamundaWebAPI.ViewModel\CamundaWebAPI.ViewModel.csproj" />
   </ItemGroup>
 
 </Project>
