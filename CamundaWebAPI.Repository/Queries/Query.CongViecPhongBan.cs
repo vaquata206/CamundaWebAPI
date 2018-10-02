@@ -15,13 +15,27 @@ namespace CamundaWebAPI.Repository.Queries
                           ,[DaXoa]
                       FROM [CongViecPhongBans] WHERE ChiDaoId = @ChiDaoId";
 
-        public const string GetCongViecPhongBanByPhongBanId = @"SELECT [CongViecPhongBanId]
-                          ,[PhongBanId]
-                          ,[ChiDaoId]
-                          ,[TrangThai]
-                          ,[NgayTao]
-                          ,[NgaySua]
-                          ,[DaXoa]
-                      FROM [CongViecPhongBans] WHERE PhongBanId = @PhongBanId";
+        public const string GetDsCongViecPhongBanByPhongBanId = @"SELECT cvpb.CongViecPhongBanId as CongViecPhongBanId
+	                       ,cvpb.PhongBanId as PhongBanId
+	                       ,cvpb.ChiDaoId as ChiDaoId
+	                       ,cd.NoiDung as NoiDungChiDao
+	                       ,cd.NgayTao as NgayTao
+	                       ,cd.NgaySua as NgaySua
+	                       ,cd.DaXoa as DaXoa
+                      FROM [CongViecPhongBans] as cvpb
+                      left join [ChiDao] as cd on cvpb.ChiDaoId = cd.ChiDaoId
+                      WHERE cvpb.PhongBanId = @PhongBanId
+                      ORDER BY cd.NgayTao DESC";
+
+        public const string GetCongViecPhongBanById = @"SELECT cvpb.CongViecPhongBanId as CongViecPhongBanId
+	                       ,cvpb.PhongBanId as PhongBanId
+	                       ,cvpb.ChiDaoId as ChiDaoId
+	                       ,cd.NoiDung as NoiDungChiDao
+	                       ,cd.NgayTao as NgayTao
+	                       ,cd.NgaySua as NgaySua
+	                       ,cd.DaXoa as DaXoa
+                      FROM [CongViecPhongBans] as cvpb
+                      inner join [ChiDao] as cd on cvpb.ChiDaoId = cd.ChiDaoId
+                      WHERE cvpb.CongViecPhongBanId = @CongViecPhongBanId";
     }
 }
