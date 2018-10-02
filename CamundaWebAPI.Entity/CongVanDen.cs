@@ -12,5 +12,6 @@ namespace CamundaWebAPI.Entity
         public string SoCongVan { get; set; }
         public string TrichYeu { get; set; }
         public int TrangThai { get; set; }
+        public Guid ProcessInstanceId { get; set; }
     }
 }
