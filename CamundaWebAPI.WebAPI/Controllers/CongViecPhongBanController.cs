@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CamundaWebAPI.WebAPI.Controllers
 {
+    [Route("api/congviecphongban")]
     public class CongViecPhongBanController : Controller
     {
         private IUnitOfWork _uow;
