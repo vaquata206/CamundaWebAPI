@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CamundaWebAPI.WebAPI.Controllers
 {
+    [Route("api/congviecphongban")]
     public class CongViecPhongBanController : Controller
     {
         private IUnitOfWork _uow;
@@ -28,7 +29,7 @@ namespace CamundaWebAPI.WebAPI.Controllers
                 var result = new BaseResponse<IEnumerable<CongViecPhongBan>>()
                 {
                     Message = "Get OK",
-                    Code = 200,
+                    Code = 200,     
                     Result = data
                 };
 

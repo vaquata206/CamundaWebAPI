@@ -13,7 +13,7 @@ namespace CamundaWebAPI.Repository.Queries
                         ,[NgayTao]
                         ,[NgaySua]
                         ,[DaXoa]
-                        ,[ProcessId]
+                        ,[ProcessInstanceId]
                         FROM [CongVanDens] WHERE DaXoa = 0 ORDER BY NgayTao DESC";
     }
 }
