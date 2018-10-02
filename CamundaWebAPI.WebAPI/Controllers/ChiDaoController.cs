@@ -48,7 +48,7 @@ namespace CamundaWebAPI.WebAPI.Controllers
             }
         }
 
-        [HttpGet, Route("{processId}")]
+        [HttpGet, Route("{processId}/task")]
         public async Task<IActionResult> GetTaskInfo(Guid processId)
         {
             try
