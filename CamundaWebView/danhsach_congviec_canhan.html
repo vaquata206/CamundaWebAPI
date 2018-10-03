@@ -43,7 +43,6 @@
                                     <th>Nội dung</th>
                                     <th>Phiếu giao việc id</th>
                                     <th>Process Id</th>
-                                    <th>Trạng thái</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -58,7 +57,6 @@
         <table class="table-clone" style="display: none;">
             <tbody>
                 <tr>
-                    <td><input type="text" class="form-control" name=""></td>
                     <td><input type="text" class="form-control" name=""></td>
                     <td><input type="text" class="form-control" name=""></td>
                     <td><input type="text" class="form-control" name=""></td>
@@ -110,8 +108,7 @@
                             box.find(controller.HTML.clonelist + ":nth-child(6) input").attr("value", responseData.result[i].noiDung);
                             box.find(controller.HTML.clonelist + ":nth-child(7) input").attr("value", responseData.result[i].phieuGiaoViecId);
                             box.find(controller.HTML.clonelist + ":nth-child(8) input").attr("value", responseData.result[i].processInstanceId);
-                            box.find(controller.HTML.clonelist + ":nth-child(9) input").attr("value", responseData.result[i].trangThai);
-                            box.find(controller.HTML.clonelist + ":nth-child(10) button").attr("data-id", responseData.result[i].processInstanceId);
+                            box.find(controller.HTML.clonelist + ":nth-child(9) button").attr("data-id", responseData.result[i].processInstanceId);
                             box.prependTo(controller.RESULT.tableresult);
                             // lấy taskId
                             var processId = responseData.result[i].processInstanceId;

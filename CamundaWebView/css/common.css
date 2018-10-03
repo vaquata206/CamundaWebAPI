@@ -1,2 +1,4 @@
 .refix:before, .refix:after{content:'';display: table;width:100%;clear: both}
 .bfooter{display: block;width:100%;min-height:20px;background:#000;color:#fff;position: fixed;bottom:0px;left:0px;font-size:10px;padding:8px 0;}
+.navigation{}
+.navigation:before, .navigation:after{content:'';display: table;width:100%; clear: both;}
