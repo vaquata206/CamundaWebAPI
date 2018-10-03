@@ -18,13 +18,14 @@ namespace CamundaWebAPI.Repository.Queries
         public const string GetDsCongViecPhongBanByPhongBanId = @"SELECT cvpb.CongViecPhongBanId as CongViecPhongBanId
 	                       ,cvpb.PhongBanId as PhongBanId
 	                       ,cvpb.ChiDaoId as ChiDaoId
+                           ,cvpb.TrangThai as TrangThai
 	                       ,cd.NoiDung as NoiDungChiDao
 	                       ,cd.NgayTao as NgayTao
 	                       ,cd.NgaySua as NgaySua
 	                       ,cd.DaXoa as DaXoa
                       FROM [CongViecPhongBans] as cvpb
                       left join [ChiDao] as cd on cvpb.ChiDaoId = cd.ChiDaoId
-                      WHERE cvpb.PhongBanId = @PhongBanId
+                      WHERE cvpb.PhongBanId = @PhongBanId and cvpb.TrangThai = 0
                       ORDER BY cd.NgayTao DESC";
 
         public const string GetCongViecPhongBanById = @"SELECT cvpb.CongViecPhongBanId as CongViecPhongBanId
