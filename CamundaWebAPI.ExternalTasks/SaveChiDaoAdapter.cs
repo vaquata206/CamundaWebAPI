@@ -68,6 +68,8 @@ namespace CamundaWebAPI.ExternalTasks
 
                         uow.Commit();
                     }
+
+                    resultVariables.Add("xoaCongVan", false);
                 }
                 else
                 {
