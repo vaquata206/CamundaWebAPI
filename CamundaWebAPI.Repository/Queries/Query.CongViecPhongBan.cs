@@ -18,7 +18,7 @@ namespace CamundaWebAPI.Repository.Queries
         public const string GetDsCongViecPhongBanByPhongBanId = @"SELECT cvpb.CongViecPhongBanId as CongViecPhongBanId
 	                       ,cvpb.PhongBanId as PhongBanId
 	                       ,cvpb.ChiDaoId as ChiDaoId
-	                       ,cd.NoiDung as NoiDungChiDao
+	                       ,cvpb.NoiDung as NoiDungChiDao
 	                       ,cd.NgayTao as NgayTao
 	                       ,cd.NgaySua as NgaySua
 	                       ,cd.DaXoa as DaXoa
