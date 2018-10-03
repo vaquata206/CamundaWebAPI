@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Công việc cá nhân</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="./plugins/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="./plugins/bootstrap-3.3.7-dist/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" type="text/css" href="./plugins/font-awesome-4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="./css/common.css">
+        <!-- //////////////////// -->
+
+        <!-- lấy id của người được giao việc -->
+
+        <!-- //////////////////// -->
+    </head>
+    <body>
+        <div class="container">
+            <h1>Danh sách công việc cá nhân</h1>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="refix">
+                        <div class="pull-left">
+                            Danh sách công việc cá nhân
+                        </div>
+                        <div class="pull-right">
+                            <a href="tao_congviecphongban.html" class="btn btn-default btn-xs"></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body" id="phongban">
+                    <div class="table-reponsive">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Cá nhân id</th>
+                                    <th>Công việc cá nhân id</th>
+                                    <th>Xóa</th>
+                                    <th>Ngày sửa</th>
+                                    <th>Ngày tạo</th>
+                                    <th>Nội dung</th>
+                                    <th>Phiếu giao việc id</th>
+                                    <th>Process Id</th>
+                                    <th>Trạng thái</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                            <tfoot colspan="10"></tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <table class="table-clone" style="display: none;">
+            <tbody>
+                <tr>
+                    <td><input type="text" class="form-control" name=""></td>
+                    <td><input type="text" class="form-control" name=""></td>
+                    <td><input type="text" class="form-control" name=""></td>
+                    <td><input type="text" class="form-control" name=""></td>
+                    <td><input type="text" class="form-control" name=""></td>
+                    <td><input type="text" class="form-control" name=""></td>
+                    <td><input type="text" class="form-control" name=""></td>
+                    <td><input type="text" class="form-control" name=""></td>
+                    <td><input type="text" class="form-control" name=""></td>
+                    <td><button type="submit" name="hoanthanhgiaoviec" data-id="" class="btn btn-success">Hoàn thành giao việc</button></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="10"><input type="hidden" name="taskId"></td>
+                </tr>
+            </tfoot>
+        </table>
+        <div class="bfooter text-center">Design by camunda-Team</div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script type="text/javascript" src="./plugins/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+        <script type="text/javascript">
+            $(function(){
+                var controller = {
+                    HTML: {
+                        clonetable: ".table-clone tbody tr",
+                        clonelist: "td"
+                    },
+                    RESULT:{
+                        tableresult: "#phongban tbody"
+                    }
+                };
+
+                var id = getUrlVars()["id"];
+                // lấy danh sách công việc cá nhân
+                $.ajax({
+                    type: "GET",
+                    url: "https://localhost:44374/api/nhanvien/" + id + "/congvieccanhan",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (responseData, textStatus, jqXHR) {
+                        debugger;
+                        for(var i = 0; i < responseData.result.length; i++){
+                            var cloneTable = $(controller.HTML.clonetable);
+                            box = cloneTable.clone(true, true);
+                            box.find(controller.HTML.clonelist + ":nth-child(1) input").attr("value", responseData.result[i].caNhanId);
+                            box.find(controller.HTML.clonelist + ":nth-child(2) input").attr("value", responseData.result[i].congViecCaNhanId);
+                            box.find(controller.HTML.clonelist + ":nth-child(3) input").attr("value", responseData.result[i].daXoa? "1":"0");
+                            box.find(controller.HTML.clonelist + ":nth-child(4) input").attr("value", responseData.result[i].ngaySua);
+                            box.find(controller.HTML.clonelist + ":nth-child(5) input").attr("value", responseData.result[i].ngayTao);
+                            box.find(controller.HTML.clonelist + ":nth-child(6) input").attr("value", responseData.result[i].noiDung);
+                            box.find(controller.HTML.clonelist + ":nth-child(7) input").attr("value", responseData.result[i].phieuGiaoViecId);
+                            box.find(controller.HTML.clonelist + ":nth-child(8) input").attr("value", responseData.result[i].processInstanceId);
+                            box.find(controller.HTML.clonelist + ":nth-child(9) input").attr("value", responseData.result[i].trangThai);
+                            box.find(controller.HTML.clonelist + ":nth-child(10) button").attr("data-id", responseData.result[i].processInstanceId);
+                            box.prependTo(controller.RESULT.tableresult);
+                            // lấy taskId
+                            var processId = responseData.result[i].processInstanceId;
+                            $.ajax({
+                                type: "GET",
+                                url: "https://localhost:44374/api/phieugiaoviec/"+ processId + "/task",
+                                contentType: "application/json",
+                                success: function (repoData, textStatus, jqXHR) {
+                                    $("input[name='taskId']").attr("value", repoData.result);
+                                }
+                            });
+                        };
+                    }
+                });
+
+                // Hoàn thành phiếu giao việc
+                $("button[name='hoanthanhgiaoviec']").click(function(e){
+                    e.preventDefault();
+                    var processId = $(this).data("id");
+                    var formData = {
+                        "TaskId": $("input[name='taskId']").val(),
+                        "ProcessInstanceId": processId
+                    };
+                    $.ajax({
+                        type: "PUT",
+                        url: "https://localhost:44374/api/phieugiaoviec/hoanthanh",
+                        contentType: "application/json",
+                        data: JSON.stringify(formData),
+                        success: function (responseData, textStatus, jqXHR) {
+                            alert(responseData);
+                        },
+                        error: function (responseData, textStatus, errorThrown) {
+                            alert("Lỗi!");
+                        }
+                    });                
+                });
+
+                // get url data
+                function getUrlVars()
+                {
+                    var vars = [], hash;
+                    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+                    for(var i = 0; i < hashes.length; i++)
+                    {
+                        hash = hashes[i].split('=');
+                        vars.push(hash[0]);
+                        vars[hash[0]] = hash[1];
+                    }
+                    return vars;
+                };
+            });
+        </script>
+    </body>
+</html>

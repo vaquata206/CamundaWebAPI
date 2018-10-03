@@ -21,7 +21,7 @@
                             Chi tiết công việc phòng ban
                         </div>
                         <div class="pull-right">
-                            <a href="tao_congviecphongban.html" class="btn btn-default btn-xs">Thêm mới</a>
+                            <a href="" class="btn btn-default btn-xs congviecphongbanurl">Công việc phòng ban</a>
                         </div>
                     </div>
                 </div>
@@ -51,7 +51,7 @@
                                     <div class="col-lg-6 col-md-6 col-sm-12">
                                         <div class="form-group">
                                             <label for="nguoigiaoviec">Người giao việc</label>
-                                            <input type="text" name="nguoigiaoviec" class="form-control" id="nguoigiaoviec">
+                                            <input type="text" name="nguoigiaoviec" value="657FEF22-060D-4EC1-AD09-2443499A417B" class="form-control" id="nguoigiaoviec" readonly="">
                                         </div>
                                         <div class="form-group">
                                             <label for="noidung">Nội dung</label>
@@ -73,8 +73,8 @@
         <table class="table-clone" style="display: none;">
             <tbody>
                 <tr>
-                    <td><input type="text" name="phongban" value="" readonly="readonly" style="min-width: 280px"></td>
-                    <td></td>
+                    <td><input type="text" name="phongban" class="form-control" value="" readonly="readonly"></td>
+                    <td><input type="text" name="phongbanid" class="form-control" readonly="readonly"></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -104,33 +104,33 @@
                     url: "https://localhost:44374/api/congviecphongban/" + id,
                     contentType: "application/json; charset=utf-8",
                     success: function (responseData, textStatus, jqXHR) {
-                        debugger;
                         var cloneTable = $(controller.HTML.clonetable);
                         box = cloneTable.clone(true, true);
                         box.find(controller.HTML.clonelist + ":nth-child(1) input[name='phongban']").val(responseData.result.congViecPhongBanId);
-                        box.find(controller.HTML.clonelist + ":nth-child(2)").html(responseData.result.phongBanId);
+                        box.find(controller.HTML.clonelist + ":nth-child(2) input").attr("value", responseData.result.phongBanId);
                         box.find(controller.HTML.clonelist + ":nth-child(3)").html(responseData.result.chiDaoId);
                         box.find(controller.HTML.clonelist + ":nth-child(4)").html(responseData.result.noiDungChiDao);
                         box.find(controller.HTML.clonelist + ":nth-child(5)").html(responseData.result.ngayTao);
                         box.find(controller.HTML.clonelist + ":nth-child(6)").html(responseData.result.ngaySua);
                         box.prependTo(controller.RESULT.tableresult);
                         $("input[name='processId']").val(responseData.result.processInstanceId);
+                        var processId = responseData.result.processInstanceId;
                         $.ajax({
                             type: "GET",
-                            url: "https://localhost:44374/api/congvanden/"+ responseData.result.processInstanceId + "/task",
+                            url: "https://localhost:44374/api/phieugiaoviec/"+ processId + "/task",
                             contentType: "application/json",
                             success: function (repoData, textStatus, jqXHR) {
                                 $("input[name='taskId']").attr("value", repoData.result);
                             }
                         });
-                    },
-                    error: function (responseData, textStatus, errorThrown) {
+                        $("a.congviecphongbanurl").attr("href", "congviec_phongban.html?id=" + responseData.result.phongBanId);
                     }
                 });
 
                 // Tạp phiếu giao việc
                 $("button[name='giaoviec']").click(function(e){
                     e.preventDefault();
+                    var phongbanId = $("input[name='phongbanid']").val();
                     var formData = {
                         "ProcessInstanceId": $("input[name='processId']").val(),
                         "TaskId": $("input[name='taskId']").val(),
@@ -138,10 +138,9 @@
                         "PhieuGiaoViec": {
                             "NguoiGiaoId": $("input[name='nguoigiaoviec']").val(),
                             "NoiDung": $("input[name='noidung']").val(),
-                            "NhanVienThucHien": $("input[name='nhanviengiaoviec']").val()
+                            "NhanVienThucHien": "[\"" + $("input[name='nhanviengiaoviec']").val() + "\"]"
                         }
                     };
-                    debugger
                     $.ajax({
                         type: "POST",
                         url: "https://localhost:44374/api/phieugiaoviec",
@@ -149,10 +148,11 @@
                         data: JSON.stringify(formData),
                         success: function (responseData, textStatus, jqXHR) {
                             alert(responseData);
-                            window.location = "index.html";
+                            window.location = "congviec_phongban.html?id=" + phongbanId;
                         },
                         error: function (responseData, textStatus, errorThrown) {
                             alert("Lỗi!");
+                            window.location = "congviec_phongban.html?id=" + phongbanId;
                         }
                     });                
                 });

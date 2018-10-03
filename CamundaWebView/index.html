@@ -3,13 +3,14 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>Danh sách công văn</title>
+        <title>Công văn</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" type="text/css" href="./plugins/bootstrap-3.3.7-dist/css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="./plugins/bootstrap-3.3.7-dist/css/bootstrap-theme.min.css">
         <link rel="stylesheet" type="text/css" href="./plugins/font-awesome-4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="./css/common.css">
+
     </head>
     <body>
         <div class="container">
@@ -99,7 +100,8 @@
                             box.find(controller.HTML.clonelist + ":nth-child(8)").html(responseData.result[i].daXoa? "1":"0");
                             box.find(controller.HTML.clonelist + ":nth-child(9) a").attr("href", "chitiet_congvan.html?id=" + responseData.result[i].congVanDenId);
                             /*box.find(controller.HTML.clonelist + ":nth-child(2)").attr("", "");*/
-                            box.prependTo(controller.RESULT.tableresult);
+                            // box.prependTo(controller.RESULT.tableresult);
+                            $(controller.RESULT.tableresult).append(box);
                         }
                     },
                     error: function (responseData, textStatus, errorThrown) {

@@ -10,6 +10,11 @@
         <link rel="stylesheet" type="text/css" href="./plugins/bootstrap-3.3.7-dist/css/bootstrap-theme.min.css">
         <link rel="stylesheet" type="text/css" href="./plugins/font-awesome-4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="./css/common.css">
+        <!-- //////////////////// -->
+
+        <!-- lấy id của phòng ban -->
+
+        <!-- //////////////////// -->
     </head>
     <body>
         <div class="container">
@@ -21,7 +26,7 @@
                             Danh sách công việc phòng ban
                         </div>
                         <div class="pull-right">
-                            <a href="tao_congviecphongban.html" class="btn btn-default btn-xs">Thêm mới</a>
+                            <a href="tao_congviecphongban.html" class="btn btn-default btn-xs"></a>
                         </div>
                     </div>
                 </div>
@@ -88,12 +93,10 @@
                     contentType: "application/json; charset=utf-8",
                     success: function (responseData, textStatus, jqXHR) {
                         debugger;
-                        var count = responseData.result.length;
                         for(var i = 0; i < responseData.result.length; i++){
-                            count--;
                             var cloneTable = $(controller.HTML.clonetable);
                             box = cloneTable.clone(true, true);
-                            box.find(controller.HTML.clonelist + ":nth-child(1)").html(count);
+                            box.find(controller.HTML.clonelist + ":nth-child(1)").html(i);
                             box.find(controller.HTML.clonelist + ":nth-child(2)").html(responseData.result[i].congViecPhongBanId);
                             box.find(controller.HTML.clonelist + ":nth-child(3)").html(responseData.result[i].phongBanId);
                             box.find(controller.HTML.clonelist + ":nth-child(4)").html(responseData.result[i].chiDaoId);
@@ -104,7 +107,8 @@
 
                             box.find(controller.HTML.clonelist + ":nth-child(9) a").attr("href", "chitiet_congviecphongban.html?id=" + responseData.result[i].congViecPhongBanId);
                             /*box.find(controller.HTML.clonelist + ":nth-child(2)").attr("", "");*/
-                            box.prependTo(controller.RESULT.tableresult);
+                            // box.prependTo(controller.RESULT.tableresult);
+                            $(controller.RESULT.tableresult).append(box);
                         }
                     },
                     error: function (responseData, textStatus, errorThrown) {
