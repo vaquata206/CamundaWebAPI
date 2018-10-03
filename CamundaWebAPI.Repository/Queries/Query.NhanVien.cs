@@ -10,14 +10,14 @@ namespace CamundaWebAPI.Repository.Queries
 								,cvcn.CaNhanId as CaNhanId
 								,cvcn.PhieuGiaoViecId as PhieuGiaoViecId
 								,pgv.NoiDung as NoiDung
-								,pgv.TrangThai as TrangThai
+								,cvcn.TrangThai as TrangThai
 								,pgv.NgayTao as NgayTao
 								,pgv.NgaySua as NgaySua
 								,pgv.DaXoa as DaXoa
 								,pgv.ProcessInstanceId as ProcessInstanceId
 							FROM [CongViecCaNhan] as cvcn
 							inner join [PhieuGiaoViec] as pgv on cvcn.PhieuGiaoViecId = pgv.PhieuGiaoViecId
-							where cvcn.CaNhanId = @CaNhanId and cvcn.TrangThai = 0
+							where cvcn.CaNhanId = @CaNhanId
 							ORDER BY pgv.NgayTao DESC";
     }
 }

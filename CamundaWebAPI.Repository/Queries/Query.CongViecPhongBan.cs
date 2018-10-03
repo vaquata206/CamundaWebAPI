@@ -25,7 +25,7 @@ namespace CamundaWebAPI.Repository.Queries
 	                       ,cd.DaXoa as DaXoa
                       FROM [CongViecPhongBans] as cvpb
                       left join [ChiDao] as cd on cvpb.ChiDaoId = cd.ChiDaoId
-                      WHERE cvpb.PhongBanId = @PhongBanId and cvpb.TrangThai = 0
+                      WHERE cvpb.PhongBanId = @PhongBanId
                       ORDER BY cd.NgayTao DESC";
 
         public const string GetCongViecPhongBanById = @"SELECT cvpb.CongViecPhongBanId as CongViecPhongBanId
