@@ -17,7 +17,7 @@ namespace CamundaWebAPI.Repository.Queries
 								,pgv.ProcessInstanceId as ProcessInstanceId
 							FROM [CongViecCaNhan] as cvcn
 							inner join [PhieuGiaoViec] as pgv on cvcn.PhieuGiaoViecId = pgv.PhieuGiaoViecId
-							where cvcn.CaNhanId = @CaNhanId
+							where cvcn.CaNhanId = @CaNhanId and cvcn.TrangThai = 0
 							ORDER BY pgv.NgayTao DESC";
     }
 }
