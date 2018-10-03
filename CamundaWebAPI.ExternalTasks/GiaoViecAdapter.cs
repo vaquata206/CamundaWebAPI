@@ -41,6 +41,7 @@ namespace CamundaWebAPI.ExternalTasks
                         NoiDung = pgv.NoiDung,
                         NhanVienThucHien = pgv.NhanVienThucHien,
                         TrangThai = Constants.TrangThai.InProgress,
+                        ProcessInstanceId = new Guid(externalTask.ProcessInstanceId),
                         NgayTao = now,
                         DaXoa = false
                     };
