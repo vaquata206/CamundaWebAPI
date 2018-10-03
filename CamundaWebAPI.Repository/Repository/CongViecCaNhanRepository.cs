@@ -31,6 +31,7 @@ namespace CamundaWebAPI.Repository.Reposirory
             return await this.Connection.QueryAsync<CongViecCaNhanResponse>(
                 Query.GetDsCongViecCaNhanByCaNhanId,
                 param: new { CaNhanId = caNhanId },
+                transaction: this.Transaction,
                 commandTimeout: Constants.CommandTimeout);
         }
     }
