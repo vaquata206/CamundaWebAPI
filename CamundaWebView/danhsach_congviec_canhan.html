@@ -146,6 +146,7 @@
                         data: JSON.stringify(formData),
                         success: function (responseData, textStatus, jqXHR) {
                             alert(responseData);
+                            location.reload();
                         },
                         error: function (responseData, textStatus, errorThrown) {
                             alert("Lỗi!");
