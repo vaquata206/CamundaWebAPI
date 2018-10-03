@@ -73,7 +73,7 @@
                     $("#chitietcongvan ul li:nth-child(3)").html(responseData.result.ngayTao);
                     $("#chitietcongvan ul li:nth-child(4)").html(responseData.result.processInstanceId);
                     $("#chitietcongvan ul li:nth-child(5)").html(responseData.result.soCongVan);
-                    $("#chitietcongvan ul li:nth-child(6)").html(responseData.result.trangThai);
+                    $("#chitietcongvan ul li:nth-child(6)").html(responseData.result.trangThai == 1 ? "Hoàn thành" : "Đang thực hiện");
                     $("#chitietcongvan ul li:nth-child(7)").html(responseData.result.trichYeu);
                     $("#urlchidao").attr("href", "chidao_congvan.html?id=" + responseData.result.congVanDenId + "&processId=" + responseData.result.processInstanceId);
                     // Get taskID

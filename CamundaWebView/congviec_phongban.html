@@ -49,7 +49,7 @@
                                     <th>Nội dung</th>
                                     <th>Ngày tạo</th>
                                     <th>Ngày sửa</th>
-                                    <th>Xóa</th>
+                                    <th>Trang thái</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -110,7 +110,7 @@
                             box.find(controller.HTML.clonelist + ":nth-child(5)").html(responseData.result[i].noiDungChiDao);
                             box.find(controller.HTML.clonelist + ":nth-child(6)").html(responseData.result[i].ngayTao);
                             box.find(controller.HTML.clonelist + ":nth-child(7)").html(responseData.result[i].ngaySua);
-                            box.find(controller.HTML.clonelist + ":nth-child(8)").html(responseData.result[i].daXoa? "1":"0");
+                            box.find(controller.HTML.clonelist + ":nth-child(8)").html(responseData.result[i].trangThai == 1 ? "Hoàn thành" : "Đang thực hiện");
 
                             box.find(controller.HTML.clonelist + ":nth-child(9) a").attr("href", "chitiet_congviecphongban.html?id=" + responseData.result[i].congViecPhongBanId);
                             /*box.find(controller.HTML.clonelist + ":nth-child(2)").attr("", "");*/

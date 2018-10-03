@@ -44,7 +44,7 @@
                                 <tr>
                                     <th>Cá nhân id</th>
                                     <th>Công việc cá nhân id</th>
-                                    <th>Xóa</th>
+                                    <th>Trạng thái</th>
                                     <th>Ngày sửa</th>
                                     <th>Ngày tạo</th>
                                     <th>Nội dung</th>
@@ -64,14 +64,14 @@
         <table class="table-clone" style="display: none;">
             <tbody>
                 <tr>
-                    <td><input type="text" class="form-control" name=""></td>
-                    <td><input type="text" class="form-control" name=""></td>
-                    <td><input type="text" class="form-control" name=""></td>
-                    <td><input type="text" class="form-control" name=""></td>
-                    <td><input type="text" class="form-control" name=""></td>
-                    <td><input type="text" class="form-control" name=""></td>
-                    <td><input type="text" class="form-control" name=""></td>
-                    <td><input type="text" class="form-control" name=""></td>
+                    <td><input type="text" class="form-control" name="" readonly=""></td>
+                    <td><input type="text" class="form-control" name="" readonly=""></td>
+                    <td><input type="text" class="form-control" name="" readonly=""></td>
+                    <td><input type="text" class="form-control" name="" readonly=""></td>
+                    <td><input type="text" class="form-control" name="" readonly=""></td>
+                    <td><input type="text" class="form-control" name="" readonly=""></td>
+                    <td><input type="text" class="form-control" name="" readonly=""></td>
+                    <td><input type="text" class="form-control" name="" readonly=""></td>
                     <td><button type="submit" name="hoanthanhgiaoviec" data-id="" class="btn btn-success">Hoàn thành giao việc</button></td>
                 </tr>
             </tbody>
@@ -109,7 +109,7 @@
                             box = cloneTable.clone(true, true);
                             box.find(controller.HTML.clonelist + ":nth-child(1) input").attr("value", responseData.result[i].caNhanId);
                             box.find(controller.HTML.clonelist + ":nth-child(2) input").attr("value", responseData.result[i].congViecCaNhanId);
-                            box.find(controller.HTML.clonelist + ":nth-child(3) input").attr("value", responseData.result[i].daXoa? "1":"0");
+                            box.find(controller.HTML.clonelist + ":nth-child(3) input").attr("value", responseData.result[i].trangThai == 1 ? "Hoàn thành" : "Đang thực hiện");
                             box.find(controller.HTML.clonelist + ":nth-child(4) input").attr("value", responseData.result[i].ngaySua);
                             box.find(controller.HTML.clonelist + ":nth-child(5) input").attr("value", responseData.result[i].ngayTao);
                             box.find(controller.HTML.clonelist + ":nth-child(6) input").attr("value", responseData.result[i].noiDung);

@@ -102,7 +102,7 @@
                             box.find(controller.HTML.clonelist + ":nth-child(2)").html(responseData.result[i].congVanDenId);
                             box.find(controller.HTML.clonelist + ":nth-child(3)").html(responseData.result[i].soCongVan);
                             box.find(controller.HTML.clonelist + ":nth-child(4)").html(responseData.result[i].trichYeu);
-                            box.find(controller.HTML.clonelist + ":nth-child(5)").html(responseData.result[i].trangThai);
+                            box.find(controller.HTML.clonelist + ":nth-child(5)").html(responseData.result[i].trangThai == 1 ? "Hoàn thành" : "Đang thực hiện");
                             box.find(controller.HTML.clonelist + ":nth-child(7)").html(responseData.result[i].processInstanceId);
                             box.find(controller.HTML.clonelist + ":nth-child(8)").html(responseData.result[i].daXoa? "1":"0");
                             box.find(controller.HTML.clonelist + ":nth-child(9) a").attr("href", "chitiet_congvan.html?id=" + responseData.result[i].congVanDenId);
