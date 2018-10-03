@@ -121,6 +121,7 @@
                         box.find(controller.HTML.clonelist + ":nth-child(6)").html(responseData.result.ngaySua);
                         box.prependTo(controller.RESULT.tableresult);
                         $("input[name='processId']").val(responseData.result.processInstanceId);
+                        var trangthaia = responseData.result.trangThai;
                         var processId = responseData.result.processInstanceId;
                         $.ajax({
                             type: "GET",
@@ -131,6 +132,9 @@
                             }
                         });
                         $("a.congviecphongbanurl").attr("href", "congviec_phongban.html?id=" + responseData.result.phongBanId);
+                        if(trangthaia == 1){
+                            $("button[name='giaoviec']").remove();
+                        }
                     }
                 });
 

@@ -111,8 +111,10 @@
                             box.find(controller.HTML.clonelist + ":nth-child(6)").html(responseData.result[i].ngayTao);
                             box.find(controller.HTML.clonelist + ":nth-child(7)").html(responseData.result[i].ngaySua);
                             box.find(controller.HTML.clonelist + ":nth-child(8)").html(responseData.result[i].trangThai == 1 ? "Hoàn thành" : "Đang thực hiện");
-
                             box.find(controller.HTML.clonelist + ":nth-child(9) a").attr("href", "chitiet_congviecphongban.html?id=" + responseData.result[i].congViecPhongBanId);
+                            if (responseData.result[i].trangThai == 1){
+                                box.find(controller.HTML.clonelist + ":nth-child(9) a").removeClass("btn-success").addClass("btn-danger");
+                            }
                             /*box.find(controller.HTML.clonelist + ":nth-child(2)").attr("", "");*/
                             // box.prependTo(controller.RESULT.tableresult);
                             $(controller.RESULT.tableresult).append(box);

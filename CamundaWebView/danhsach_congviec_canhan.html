@@ -115,7 +115,14 @@
                             box.find(controller.HTML.clonelist + ":nth-child(6) input").attr("value", responseData.result[i].noiDung);
                             box.find(controller.HTML.clonelist + ":nth-child(7) input").attr("value", responseData.result[i].phieuGiaoViecId);
                             box.find(controller.HTML.clonelist + ":nth-child(8) input").attr("value", responseData.result[i].processInstanceId);
-                            box.find(controller.HTML.clonelist + ":nth-child(9) button").attr("data-id", responseData.result[i].processInstanceId);
+
+                            if (responseData.result[i].trangThai == 0){
+                                box.find(controller.HTML.clonelist + ":nth-child(9) button").attr("data-id", responseData.result[i].processInstanceId);
+                            }else{
+                                box.find(controller.HTML.clonelist + ":nth-child(9) button").prop("disabled",true);
+                                box.find(controller.HTML.clonelist + ":nth-child(9) button").removeClass("btn-success").addClass("btn-danger");
+                            }
+
                             box.prependTo(controller.RESULT.tableresult);
                             // lấy taskId
                             var processId = responseData.result[i].processInstanceId;
