@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>Công việc phòng ban</title>
+        <title>Chi tiết công việc phòng ban</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" type="text/css" href="./plugins/bootstrap-3.3.7-dist/css/bootstrap.min.css">
@@ -13,12 +13,12 @@
     </head>
     <body>
         <div class="container">
-            <h1>Công việc phòng ban</h1>
+            <h1>Chi tiết công việc phòng ban</h1>
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="refix">
                         <div class="pull-left">
-                            Danh sách công việc phòng ban
+                            Chi tiết công việc phòng ban
                         </div>
                         <div class="pull-right">
                             <a href="tao_congviecphongban.html" class="btn btn-default btn-xs">Thêm mới</a>
@@ -30,21 +30,23 @@
                         <table class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>#</th>
                                     <th>Công việc phòng ban id</th>
                                     <th>Phòng ban id</th>
                                     <th>Chỉ đạo id</th>
                                     <th>Nội dung</th>
                                     <th>Ngày tạo</th>
                                     <th>Ngày sửa</th>
-                                    <th>Xóa</th>
-                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
                             </tbody>
-                            <tfoot colspan="3"></tfoot>
+                            <tfoot>
+                            </tfoot>
                         </table>
+                        <div class="panel panel-default">
+                            <input type="hidden" name="processId" value="" >
+                            <button type="button" name="giaoviec">Giao việc</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -58,9 +60,6 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td></td>
-                    <td></td>
-                    <td><a href="" class="btn btn-primary btn-xs">Chi tiết</a></td>
                 </tr>
             </tbody>
         </table>
@@ -79,33 +78,24 @@
                     }
                 };
 
-                var phongbanId = getUrlVars()["id"];
-                debugger;
+                var id = getUrlVars()["id"];
                 // Get công việc phòng ban
                 $.ajax({
                     type: "GET",
-                    url: "https://localhost:44374/api/congviecphongban/phongban/" + phongbanId,
+                    url: "https://localhost:44374/api/congviecphongban/" + id,
                     contentType: "application/json; charset=utf-8",
                     success: function (responseData, textStatus, jqXHR) {
                         debugger;
-                        var count = responseData.result.length;
-                        for(var i = 0; i < responseData.result.length; i++){
-                            count--;
-                            var cloneTable = $(controller.HTML.clonetable);
-                            box = cloneTable.clone(true, true);
-                            box.find(controller.HTML.clonelist + ":nth-child(1)").html(count);
-                            box.find(controller.HTML.clonelist + ":nth-child(2)").html(responseData.result[i].congViecPhongBanId);
-                            box.find(controller.HTML.clonelist + ":nth-child(3)").html(responseData.result[i].phongBanId);
-                            box.find(controller.HTML.clonelist + ":nth-child(4)").html(responseData.result[i].chiDaoId);
-                            box.find(controller.HTML.clonelist + ":nth-child(5)").html(responseData.result[i].noiDungChiDao);
-                            box.find(controller.HTML.clonelist + ":nth-child(6)").html(responseData.result[i].ngayTao);
-                            box.find(controller.HTML.clonelist + ":nth-child(7)").html(responseData.result[i].ngaySua);
-                            box.find(controller.HTML.clonelist + ":nth-child(8)").html(responseData.result[i].daXoa? "1":"0");
-
-                            box.find(controller.HTML.clonelist + ":nth-child(9) a").attr("href", "chitiet_congviecphongban.html?id=" + responseData.result[i].congViecPhongBanId);
-                            /*box.find(controller.HTML.clonelist + ":nth-child(2)").attr("", "");*/
-                            box.prependTo(controller.RESULT.tableresult);
-                        }
+                        var cloneTable = $(controller.HTML.clonetable);
+                        box = cloneTable.clone(true, true);
+                        box.find(controller.HTML.clonelist + ":nth-child(1)").html(responseData.result.congViecPhongBanId);
+                        box.find(controller.HTML.clonelist + ":nth-child(2)").html(responseData.result.phongBanId);
+                        box.find(controller.HTML.clonelist + ":nth-child(3)").html(responseData.result.chiDaoId);
+                        box.find(controller.HTML.clonelist + ":nth-child(4)").html(responseData.result.noiDungChiDao);
+                        box.find(controller.HTML.clonelist + ":nth-child(5)").html(responseData.result.ngayTao);
+                        box.find(controller.HTML.clonelist + ":nth-child(6)").html(responseData.result.ngaySua);
+                        box.prependTo(controller.RESULT.tableresult);
+                        $("input[name='processId']").val(responseData.result.processInstanceId);
                     },
                     error: function (responseData, textStatus, errorThrown) {
                     }
