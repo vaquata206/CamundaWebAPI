@@ -27,26 +27,45 @@
                 </div>
                 <div class="panel-body" id="phongban">
                     <div class="table-reponsive">
-                        <table class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Công việc phòng ban id</th>
-                                    <th>Phòng ban id</th>
-                                    <th>Chỉ đạo id</th>
-                                    <th>Nội dung</th>
-                                    <th>Ngày tạo</th>
-                                    <th>Ngày sửa</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                            <tfoot>
-                            </tfoot>
-                        </table>
-                        <div class="panel panel-default">
-                            <input type="hidden" name="processId" value="" >
-                            <button type="button" name="giaoviec">Giao việc</button>
-                        </div>
+                        <form action="" method="post">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Công việc phòng ban id</th>
+                                        <th>Phòng ban id</th>
+                                        <th>Chỉ đạo id</th>
+                                        <th>Nội dung</th>
+                                        <th>Ngày tạo</th>
+                                        <th>Ngày sửa</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                                <tfoot>
+                                </tfoot>
+                            </table>
+                            <div class="panel panel-default">
+                                <input type="hidden" name="taskId" value="">
+                                <input type="hidden" name="processId" value="" >
+                                <div class="panel-body">
+                                    <div class="col-lg-6 col-md-6 col-sm-12">
+                                        <div class="form-group">
+                                            <label for="nguoigiaoviec">Người giao việc</label>
+                                            <input type="text" name="nguoigiaoviec" class="form-control" id="nguoigiaoviec">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="noidung">Nội dung</label>
+                                            <input type="text" name="noidung" class="form-control" id="noidung">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="nhanviengiaoviec">Nhân viên giao việc</label>
+                                            <input type="text" name="nhanviengiaoviec" value="657FEF22-060D-4EC1-AD09-2443499A417B" class="form-control" id="nhanviengiaoviec" readonly="">
+                                        </div>
+                                        <button type="submit" name="giaoviec" class="btn btn-success">Giao việc</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -54,7 +73,7 @@
         <table class="table-clone" style="display: none;">
             <tbody>
                 <tr>
-                    <td></td>
+                    <td><input type="text" name="phongban" value="" readonly="readonly" style="min-width: 280px"></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -78,8 +97,8 @@
                     }
                 };
 
-                var id = getUrlVars()["id"];
                 // Get công việc phòng ban
+                var id = getUrlVars()["id"];
                 $.ajax({
                     type: "GET",
                     url: "https://localhost:44374/api/congviecphongban/" + id,
@@ -88,7 +107,7 @@
                         debugger;
                         var cloneTable = $(controller.HTML.clonetable);
                         box = cloneTable.clone(true, true);
-                        box.find(controller.HTML.clonelist + ":nth-child(1)").html(responseData.result.congViecPhongBanId);
+                        box.find(controller.HTML.clonelist + ":nth-child(1) input[name='phongban']").val(responseData.result.congViecPhongBanId);
                         box.find(controller.HTML.clonelist + ":nth-child(2)").html(responseData.result.phongBanId);
                         box.find(controller.HTML.clonelist + ":nth-child(3)").html(responseData.result.chiDaoId);
                         box.find(controller.HTML.clonelist + ":nth-child(4)").html(responseData.result.noiDungChiDao);
@@ -96,9 +115,46 @@
                         box.find(controller.HTML.clonelist + ":nth-child(6)").html(responseData.result.ngaySua);
                         box.prependTo(controller.RESULT.tableresult);
                         $("input[name='processId']").val(responseData.result.processInstanceId);
+                        $.ajax({
+                            type: "GET",
+                            url: "https://localhost:44374/api/congvanden/"+ responseData.result.processInstanceId + "/task",
+                            contentType: "application/json",
+                            success: function (repoData, textStatus, jqXHR) {
+                                $("input[name='taskId']").attr("value", repoData.result);
+                            }
+                        });
                     },
                     error: function (responseData, textStatus, errorThrown) {
                     }
+                });
+
+                // Tạp phiếu giao việc
+                $("button[name='giaoviec']").click(function(e){
+                    e.preventDefault();
+                    var formData = {
+                        "ProcessInstanceId": $("input[name='processId']").val(),
+                        "TaskId": $("input[name='taskId']").val(),
+                        "CongViecPhongBanId": $("input[name='phongban']").val(),
+                        "PhieuGiaoViec": {
+                            "NguoiGiaoId": $("input[name='nguoigiaoviec']").val(),
+                            "NoiDung": $("input[name='noidung']").val(),
+                            "NhanVienThucHien": $("input[name='nhanviengiaoviec']").val()
+                        }
+                    };
+                    debugger
+                    $.ajax({
+                        type: "POST",
+                        url: "https://localhost:44374/api/phieugiaoviec",
+                        contentType: "application/json",
+                        data: JSON.stringify(formData),
+                        success: function (responseData, textStatus, jqXHR) {
+                            alert(responseData);
+                            window.location = "index.html";
+                        },
+                        error: function (responseData, textStatus, errorThrown) {
+                            alert("Lỗi!");
+                        }
+                    });                
                 });
 
                 // get url data
