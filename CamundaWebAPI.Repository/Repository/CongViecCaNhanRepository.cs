@@ -23,6 +23,7 @@ namespace CamundaWebAPI.Repository.Reposirory
             return await this.Connection.QueryFirstOrDefaultAsync<CongViecCaNhan>(
                 Query.GetCVCNByPhieuGiaoViec,
                 param: new { PhieuGiaoViecId = phieuGiaoViecId },
+                transaction: this.Transaction,
                 commandTimeout: Constants.CommandTimeout);
         }
 
@@ -31,6 +32,7 @@ namespace CamundaWebAPI.Repository.Reposirory
             return await this.Connection.QueryAsync<CongViecCaNhanResponse>(
                 Query.GetDsCongViecCaNhanByCaNhanId,
                 param: new { CaNhanId = caNhanId },
+                transaction: this.Transaction,
                 commandTimeout: Constants.CommandTimeout);
         }
     }
