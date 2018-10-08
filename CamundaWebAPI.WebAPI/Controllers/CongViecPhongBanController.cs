@@ -5,11 +5,13 @@ using System.Threading.Tasks;
 using CamundaWebAPI.Entity;
 using CamundaWebAPI.Repository.IReposirory;
 using CamundaWebAPI.ViewModel.Response;
+using CamundaWebAPI.WebAPI.Attributes;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CamundaWebAPI.WebAPI.Controllers
 {
-    [Route("api/congviecphongban")]
+    [ApiVersion("1")]
+    [Route("api/v1/congviecphongban")]
     public class CongViecPhongBanController : Controller
     {
         private IUnitOfWork _uow;
@@ -20,6 +22,8 @@ namespace CamundaWebAPI.WebAPI.Controllers
         }
 
         [HttpGet, Route("phongban/{phongBanId}")]
+        [ProducesResponseType(typeof(BaseResponse<IEnumerable<CongViecPhongBanResponse>>), 200)]
+        [ProducesResponseType(typeof(string), 500)]
         public async Task<IActionResult> Gets(Guid phongBanId)
         {
             try
@@ -42,6 +46,8 @@ namespace CamundaWebAPI.WebAPI.Controllers
         }
 
         [HttpGet, Route("{id}")]
+        [ProducesResponseType(typeof(BaseResponse<CongViecPhongBanResponse>), 200)]
+        [ProducesResponseType(typeof(string), 500)]
         public async Task<IActionResult> Get(Guid id)
         {
             try

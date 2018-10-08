@@ -10,13 +10,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CamundaWebAPI.WebAPI.Controllers
 {
-    [ApiVersion("1")]
-    [Route("api/v1/nhanvien")]
-    public class NhanVienController : Controller
+    [ApiVersion("2")]
+    [Route("api/v2/chidao")]
+    public class NhanVienV2Controller : Controller
     {
         private IUnitOfWork _uow;
 
-        public NhanVienController(IUnitOfWork uow)
+        public NhanVienV2Controller(IUnitOfWork uow)
         {
             this._uow = uow;
         }
@@ -39,7 +39,7 @@ namespace CamundaWebAPI.WebAPI.Controllers
 
                 return Ok(result);
             }
-             catch (Exception ex)
+            catch (Exception ex)
             {
                 return StatusCode(500, ex.ToString());
             }

@@ -6,12 +6,15 @@ using CamundaWebAPI.Entity;
 using CamundaWebAPI.Repository.IReposirory;
 using CamundaWebAPI.ViewModel.Request;
 using CamundaWebAPI.ViewModel.Response;
+using CamundaWebAPI.WebAPI.Attributes;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Newtonsoft.Json;
 
 namespace CamundaWebAPI.WebAPI.Controllers
 {
-    [Route("api/congvanden")]
+    [ApiVersion("1")]
+    [Route("api/v1/congvanden")]
     public class CongVanDenController : Controller
     {
         private CamundaEngineClient _camundaClient;
@@ -24,6 +27,8 @@ namespace CamundaWebAPI.WebAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(BaseResponse<IEnumerable<CongVanDen>>), 200)]
+        [ProducesResponseType(typeof(string), 500)]
         public async Task<IActionResult> Gets()
         {
             try
@@ -46,6 +51,8 @@ namespace CamundaWebAPI.WebAPI.Controllers
         }
 
         [HttpGet, Route("{id}")]
+        [ProducesResponseType(typeof(BaseResponse<CongVanDen>), 200)]
+        [ProducesResponseType(typeof(string), 500)]
         public async Task<IActionResult> GetCongVanDen(Guid id)
         {
             try
@@ -67,7 +74,9 @@ namespace CamundaWebAPI.WebAPI.Controllers
             }
         }
 
-        [HttpGet, Route("{processId}/task")]
+        [HttpGet, Route("process/{processId}")]
+        [ProducesResponseType(typeof(BaseResponse<string>), 200)]
+        [ProducesResponseType(typeof(string), 500)]
         public async Task<IActionResult> GetTaskInfo(Guid processId)
         {
             try
@@ -90,6 +99,9 @@ namespace CamundaWebAPI.WebAPI.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(typeof(BaseResponse<string>), 200)]
+        [ProducesResponseType(typeof(object), 400)]
+        [ProducesResponseType(typeof(string), 500)]
         public async Task<IActionResult> Create([FromBody] CongVanDenRequest congVanDen)
         {
             try
@@ -103,11 +115,18 @@ namespace CamundaWebAPI.WebAPI.Controllers
 
                     var jCongVanDen = JsonConvert.SerializeObject(congVanDen);
 
-                    var taskResponse = await _camundaClient.BpmnWorkflowService.StartProcessInstanceAsync("XuLyCongVanProcess", new Dictionary<string, object>() {
+                    var taskResponse = await _camundaClient.BpmnWorkflowService.StartProcessInstanceAsync("XuLyCongVanWithExceptionProcess", new Dictionary<string, object>() {
                         { "congVanDen", jCongVanDen }
                     }, "taoCongVan");
 
-                    return Ok(Json(new { ProcessId = taskResponse.ProcessInstanceId, StatusCode = (int)taskResponse.Content.StatusResponse, Message = taskResponse.Content.Message }));
+                    var result = new BaseResponse<string>()
+                    {
+                        Message = taskResponse.Content.Message,
+                        Code = (int)taskResponse.Content.StatusResponse,
+                        Result = taskResponse.ProcessInstanceId
+                    };
+
+                    return Ok(result);
                 }
                 else
                 {
@@ -120,7 +139,9 @@ namespace CamundaWebAPI.WebAPI.Controllers
             }
         }
 
-        [HttpDelete, Route("{taskId}")]
+        [HttpDelete, Route("task/{taskId}")]
+        [ProducesResponseType(typeof(string), 200)]
+        [ProducesResponseType(typeof(string), 500)]
         public async Task<IActionResult> Delete(Guid taskId)
         {
             try

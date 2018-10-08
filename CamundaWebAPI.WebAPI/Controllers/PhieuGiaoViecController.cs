@@ -7,12 +7,15 @@ using CamundaWebAPI.Entity;
 using CamundaWebAPI.Repository.IReposirory;
 using CamundaWebAPI.ViewModel.Request;
 using CamundaWebAPI.ViewModel.Response;
+using CamundaWebAPI.WebAPI.Attributes;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Newtonsoft.Json;
 
 namespace CamundaWebAPI.WebAPI.Controllers
 {
-    [Route("api/phieugiaoviec")]
+    [ApiVersion("1")]
+    [Route("api/v1/phieugiaoviec")]
     public class PhieuGiaoViecController : Controller
     {
         private CamundaEngineClient _client;
@@ -25,6 +28,8 @@ namespace CamundaWebAPI.WebAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(BaseResponse<IEnumerable<PhieuGiaoViec>>), 200)]
+        [ProducesResponseType(typeof(string), 500)]
         public async Task<IActionResult> Gets() 
         {
             try
@@ -47,6 +52,8 @@ namespace CamundaWebAPI.WebAPI.Controllers
         }
 
         [HttpGet, Route("{id}")]
+        [ProducesResponseType(typeof(BaseResponse<PhieuGiaoViec>), 200)]
+        [ProducesResponseType(typeof(string), 500)]
         public async Task<IActionResult> Get(Guid id)
         {
             try
@@ -68,7 +75,9 @@ namespace CamundaWebAPI.WebAPI.Controllers
             }
         }
 
-        [HttpGet, Route("{processId}/task")]
+        [HttpGet, Route("process/{processId}")]
+        [ProducesResponseType(typeof(BaseResponse<string>), 200)]
+        [ProducesResponseType(typeof(string), 500)]
         public async Task<IActionResult> GetTaskInfo(Guid processId)
         {
             try
@@ -91,6 +100,9 @@ namespace CamundaWebAPI.WebAPI.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(typeof(string), 200)]
+        [ProducesResponseType(typeof(object), 400)]
+        [ProducesResponseType(typeof(string), 500)]
         public async Task<IActionResult> Create([FromBody] PhieuGiaoViecRequest phieuGiaoViecRequest)
         {
             try
@@ -123,6 +135,8 @@ namespace CamundaWebAPI.WebAPI.Controllers
         }
 
         [HttpPut, Route("hoanthanh")]
+        [ProducesResponseType(typeof(string), 200)]
+        [ProducesResponseType(typeof(string), 500)]
         public async Task<IActionResult> Update([FromBody] TrangThaiRequest trangThaiRequest)
         {
             try

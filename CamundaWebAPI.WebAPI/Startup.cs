@@ -11,6 +11,8 @@ using CamundaWebAPI.ExternalTasks;
 using CamundaWebAPI.Core.Common;
 using CamundaWebAPI.Repository.IReposirory;
 using CamundaWebAPI.Repository.Repository;
+using Swashbuckle.AspNetCore.Swagger;
+using CamundaWebAPI.WebAPI.Helpers;
 
 namespace CamundaWebAPI.WebAPI
 {
@@ -40,6 +42,9 @@ namespace CamundaWebAPI.WebAPI
                                                                      .AllowAnyHeader()));
             // Add services to the collection.
             services.AddMvc();
+
+            // Add Swagger gen
+            services.AddSwaggerGen(SwaggerHelper.ConfigureSwaggerGen);
 
             // Create the container builder.
             var builder = new ContainerBuilder();
@@ -78,6 +83,10 @@ namespace CamundaWebAPI.WebAPI
             loggerFactory.AddDebug();
 
             app.UseCors("AllowAll");
+            
+            app.UseSwagger(SwaggerHelper.ConfigureSwagger);
+
+            app.UseSwaggerUI(SwaggerHelper.ConfigureSwaggerUI);
 
             app.UseMvc();
             // As of Autofac.Extensions.DependencyInjection 4.3.0 the AutofacDependencyResolver
