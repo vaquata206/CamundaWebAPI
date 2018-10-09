@@ -124,5 +124,53 @@ namespace CamundaClient.Service
                 throw new EngineException("Could not report failure for external Task: " + response.ReasonPhrase);
             }
         }
+
+        public IList<ExternalTask> GetExternalTasksNoRetries()
+        {
+            var http = helper.HttpClient();
+            try
+            {
+                var response = http.GetAsync("external-task?noRetriesLeft=true").Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    var tasks = JsonConvert.DeserializeObject<IEnumerable<ExternalTask>>(response.Content.ReadAsStringAsync().Result);
+                    return new List<ExternalTask>(tasks);
+                }
+                else
+                {
+                    throw new EngineException("Could not get external task that have 0 retries");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                // TODO: Handle Exception, add back off
+                throw;
+            }
+        }
+
+        public void SetExternalTaskRetries(string externalTaskId)
+        {
+            var http = helper.HttpClient();
+            try
+            {
+                var data = new
+                {
+                    retries = 2
+                };
+                var requestContent = new StringContent(JsonConvert.SerializeObject(data, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }), Encoding.UTF8, CamundaClientHelper.CONTENT_TYPE_JSON);
+                var response = http.PutAsync(string.Format("external-task/{0}/retries", externalTaskId), requestContent).Result;
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new EngineException("Could not set number of retries left to external task: " + externalTaskId);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                // TODO: Handle Exception, add back off
+                throw;
+            }
+        }
     }
 }

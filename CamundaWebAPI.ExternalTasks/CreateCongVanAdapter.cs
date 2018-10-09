@@ -25,6 +25,8 @@ namespace CamundaWebAPI.ExternalTasks
         {
             try
             {
+                //throw new Exception("test");
+                
                 var cvd = ExternalTaskHelper.GetVariable<CongVanDenRequest>(externalTask.Variables, CongVanDen);
                 if (cvd != null)
                 {

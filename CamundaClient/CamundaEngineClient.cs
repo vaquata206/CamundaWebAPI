@@ -44,6 +44,7 @@ namespace CamundaClient
             this.StartWorkers(externalSolution);
             this.CleanEvents();
             this.RepositoryService.AutoDeploy();
+            this.ResetFailedExternalTasks();
         }
 
         public void Shutdown()
@@ -134,7 +135,19 @@ namespace CamundaClient
             {
                 worker.StopWork();
             }
-        } 
+        }
+
+        public void ResetFailedExternalTasks()
+        {
+            var tasks = this.ExternalTaskService.GetExternalTasksNoRetries();
+            if (tasks != null && tasks.Count > 0)
+            {
+                foreach (var task in tasks)
+                {
+                    this.ExternalTaskService.SetExternalTaskRetries(task.Id);
+                }
+            }
+        }
 
         // HELPER METHODS
 
